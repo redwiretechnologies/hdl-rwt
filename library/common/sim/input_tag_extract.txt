@@ -1,0 +1,82 @@
+# Data Packet Format:
+#
+#   * aabbccdd uu
+#
+#    where:
+#      '*' indicates that tlast should be asserted,
+#      aabbccdd is the data, and
+#      uu is tuser.
+#
+# Tagged Packets Format
+#
+#   + aabbccdd tt
+#
+#   where:
+#      '+' indicates that this is a tag,
+#      aabbccdd is the data,
+#      tt is the tag type, and
+#
+# Notes:
+#   - tuser, tag type, and '*' are optional
+#   - '*' (the eop character) can appear anywhere on the line.
+#   - '*' can appear on tagged formats.
+#   - Comments begin with '#' and can start anywhere on the line
+#   - Extra whitespace doesn't matter
+#   - Commas get replaced with spaces
+#   - User is not specified for tagged packets
+#   - Tagged packets cannot be last.
+
++ 1020304010203040 60
++ 1121314111213141 61
+  1222324212223242
+  1323334313233343
+  1424344414243444
+  1525354515253545
+  1626364616263646
+  1727374717273747
+  1828384818283848
+* 1929394919293949
+
+  1020304010203040
+  1121314111213141
+  AAAAAAAAAAAAAAAA
+  1222324212223242
+  1323334313233343
++ 1424344414243444 11
+  1525354515253545
++ 1626364616263646 22
+  1727374717273747
+  1828384818283848
+* 1929394919293949
+
+  1020304010203040
+  1121314111213141
+  AAAAAAAAAAAAAAAA
+  1222324212223242
+  1323334313233343
++ 1424344414243444 11
+  1525354515253545
++ 1626364616263646 22
+  1727374717273747
+  1828384818283848
+  1020304010203040
+  1121314111213141
+  AAAAAAAAAAAAAAAA
+  1222324212223242
+  1323334313233343
+  1020304010203040
+  1121314111213141
+  AAAAAAAAAAAAAAAA
+  1222324212223242
+  1323334313233343
+  1020304010203040
+  1121314111213141
+  AAAAAAAAAAAAAAAA
+  1222324212223242
+  1323334313233343
+  1020304010203040
+  1121314111213141
+  AAAAAAAAAAAAAAAA
+  1222324212223242
+  1323334313233343
+* 1929394919293949

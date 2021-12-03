@@ -1,0 +1,73 @@
+# Data Packet Format:
+#
+#  * aabbccdd uu
+#
+#   where
+#      '*' indicates that tlast should be asserted,
+#      aabbccdd is the data, and
+#      uu is the tuser.
+#
+# Notes:
+#   - tuser and '*' are optional
+#   - '*' (the eop character) can appear anywhere on the line.
+#   - Comments begin with '#' and can start anywhere on the line
+#   - Extra whitespace doesn't matter
+#   - Commas get replaced with spaces
+#
+# Bit 7 of user indicates that this is a tag.
+# Bit 6-0 are the tag types.
+
+  1020304010203040 e0   # Tag of 0x60
+  1121314111213141 e1   # Tag of 0x61
+  1222324212223242
+  1323334313233343
+  1424344414243444
+  1525354515253545
+  1626364616263646
+  1727374717273747
+  1828384818283848
+* 1929394919293949
+
+  1020304010203040
+  1121314111213141
+  AAAAAAAAAAAAAAAA       # Will get escaped
+  1222324212223242
+  1323334313233343
+  1424344414243444 7f    # This is not a tag
+  1525354515253545
+  1626364616263646 a2    # Tag of 0x22
+  1727374717273747
+  1828384818283848
+* 1929394919293949
+
+  1020304010203040
+  1121314111213141
+  AAAAAAAAAAAAAAAA
+  1222324212223242
+  1323334313233343
+  1424344414243444 81   # Tag 0x11
+  1525354515253545
+  1626364616263646 a2   # Tag 0x22
+  1727374717273747
+  1828384818283848
+  1020304010203040
+  1121314111213141
+  AAAAAAAAAAAAAAAA       # Will get escaped
+  1222324212223242
+  1323334313233343
+  1020304010203040
+  1121314111213141
+  AAAAAAAAAAAAAAAA       # Will get escaped
+  1222324212223242
+  1323334313233343
+  1020304010203040
+  1121314111213141
+  AAAAAAAAAAAAAAAA       # Will get escaped
+  1222324212223242
+  1323334313233343
+  1020304010203040
+  1121314111213141
+  AAAAAAAAAAAAAAAA       # Will get escaped
+  1222324212223242
+  1323334313233343
+* 1929394919293949

@@ -1,0 +1,85 @@
+# Data Packet Format:
+#
+#  * aabbccdd uu
+#
+#   where
+#      '*' indicates that tlast should be asserted,
+#      aabbccdd is the data, and
+#      uu is the tuser.
+#
+# Notes:
+#   - tuser and '*' are optional
+#   - '*' (the eop character) can appear anywhere on the line.
+#   - Comments begin with '#' and can start anywhere on the line
+#   - Extra whitespace doesn't matter
+#   - Commas get replaced with spaces
+
+# Comment can go here
+  10203040 0
+  11213141 0
+  12223242 0
+  13233343 0
+  14243444 0
+  15253545 0
+  16263646 0
+  17273747 0
+  18283848 0
+* 19293949 0
+
+
+      # Comment can be indented
+20304010 1    # And inline comments work
+21314111 2
+22324212 4
+23334313 8
+24344414 7
+25354515 3
+26364616 2
+27374717 ff
+28384818 fe
+29394919 dd
+
+# User bits are optional
+20304010
+21314111 *
+
+# Indenting is allowed, and spaces don't matter
+  20304010     0
+  21314111     1      *
+
+# eop tag can go anywhere
+  20304010
+* 21314111
+
+20304010
+21314111*
+
+20304010 1
+21314111 * 1
+
+20304010
+* 21314111 * 1 *
+
+  20304010
+* 21314111
+
+20304010
+21314111 *
+
+20304010
+21314111     *
+
+20304010
+21314111 1   *
+
+# Commas are also allowed
+10203040, 0
+11213141, 0
+12223242, 0
+13233343, 1
+14243444, 0
+15253545, 0
+16263646, 0
+17273747, 0
+18283848, 0
+19293949, 0, *
