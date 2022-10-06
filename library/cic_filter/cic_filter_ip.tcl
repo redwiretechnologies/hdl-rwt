@@ -9,6 +9,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 adi_ip_create cic_filter
 adi_ip_files cic_filter [list \
   "$ad_hdl_dir/library/common/ad_iqcor.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
   "$ad_hdl_dir/library/axi_adc_decimate/fir_decim.v" \
   "$ad_hdl_dir/library/axi_adc_decimate/cic_decim.v" \
   "$ad_hdl_dir/library/axi_adc_decimate/axi_adc_decimate_filter.v" \

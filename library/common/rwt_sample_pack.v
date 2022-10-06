@@ -47,14 +47,14 @@ module rwt_sample_pack #(
     .DATA_WIDTH(67+UWIDTH),
     .ASYNC_CLK(0),
     .ADDRESS_WIDTH(1),
-    .S_AXIS_REGISTERED(1))
+    .M_AXIS_REGISTERED(1))
   pre_fifo (
     .s_axis_aclk(clk),
     .s_axis_aresetn(aresetn),
     .s_axis_ready(s_axi_ready),
     .s_axis_valid(s_axi_valid),
     .s_axis_data({s_axi_data, enable_reduce, s_axi_last, s_axi_user}),
-    .s_axis_empty(),
+    .s_axis_full(),
     .s_axis_room(),
 
     .m_axis_aclk(clk),
@@ -62,6 +62,7 @@ module rwt_sample_pack #(
     .m_axis_ready(prefifo_ready),
     .m_axis_valid(prefifo_valid),
     .m_axis_data({prefifo_data, prefifo_enables, prefifo_last, prefifo_user}),
+    .m_axis_empty(),
     .m_axis_level());
 
   assign postfifo_user = prefifo_user;
@@ -128,14 +129,14 @@ module rwt_sample_pack #(
     .DATA_WIDTH(65+UWIDTH),
     .ASYNC_CLK(0),
     .ADDRESS_WIDTH(1),
-    .S_AXIS_REGISTERED(1))
+    .M_AXIS_REGISTERED(1))
   post_fifo (
     .s_axis_aclk(clk),
     .s_axis_aresetn(aresetn),
     .s_axis_ready(postfifo_ready),
     .s_axis_valid(postfifo_valid),
     .s_axis_data({postfifo_data, postfifo_last, postfifo_user}),
-    .s_axis_empty(),
+    .s_axis_full(),
     .s_axis_room(),
 
     .m_axis_aclk(clk),
@@ -143,6 +144,7 @@ module rwt_sample_pack #(
     .m_axis_ready(m_axi_ready),
     .m_axis_valid(m_axi_valid),
     .m_axis_data({m_axi_data, m_axi_last, m_axi_user}),
+    .m_axis_empty(),
     .m_axis_level());
 
 endmodule

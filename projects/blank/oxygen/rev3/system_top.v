@@ -1,13 +1,12 @@
-//  Top level for oxygen
-//
 //  EMIO GPIO Settings:
-//    0-13  : GPIO Header (IO)
-//    14-15 : Reserved
-//    16-21 : RF PA GPIO (IO)
+//    0-11  : GPIO Header (IO)
+//    12-15 : Reserved
+//    16-21 : RF Personality GPIO (IO)
 //    22    : Pushbutton Interrupt (In)
 //    23    : Pushbutton Reset Power (In)
 //    24    : Watchdog (Out)
-//    25-31 : Reserved
+//    25    : USBC ID (In)
+//    26-31 : Reserved
 //    32-39 : AD9361 CTRL_OUT (gpio_status) (In)
 //    40-43 : AD9361 CTRL_IN (gpio_ctl) (Out)
 //    44    : AD9361 EN AGC (Out)
@@ -46,7 +45,7 @@ module system_top (
   output        spi_mosi,
   input         spi_miso,
 
-  inout [13:0]  gpio_hdr,
+  inout [11:0]  gpio_hdr,
   inout [5:0]   gpio_rf,
 
   output        wd,
@@ -75,6 +74,8 @@ module system_top (
 
   // Reserved
   assign gpio_i[94:49] = gpio_o[94:49];
+  assign gpio_i[31:26] = gpio_o[31:26];
+  assign gpio_i[15:13] = gpio_o[15:13];
 
   // AD9361 GPIO [48:32]
   assign gpio_resetb = gpio_o[46:46];
@@ -91,9 +92,8 @@ module system_top (
   assign gpio_i[24] = gpio_o[24];
   assign wd = gpio_t[24] ? 1'bz : gpio_o[24];
   assign gpio_i[25] = usbc_id;
-  assign gpio_i[31:26] = gpio_o[31:26];
 
-  generate for (i = 0; i < 14; i = i + 1)
+  generate for (i = 0; i < 12; i = i + 1)
     begin
       assign gpio_hdr[i] = gpio_t[i] ? 1'bz : gpio_o[i];
       assign gpio_i[i] = gpio_hdr[i];

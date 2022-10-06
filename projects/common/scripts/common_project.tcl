@@ -1,3 +1,4 @@
+source "$script_dir/../../../common/scripts/common_functions.tcl"
 set no_project_run 0
 
 if {$argc < 1} {
@@ -57,7 +58,7 @@ set p_device $tpd
 set p_board  $tpb
 set sys_zynq $tsz
 
-adi_project $project_name
+adi_project_create $project_name 0 {} "" $tpb
 
 adi_project_files $project_name $project_files
 

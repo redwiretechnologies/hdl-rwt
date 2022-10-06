@@ -156,7 +156,7 @@ module rwt_common_adc_if (
     .DATA_WIDTH(68),
     .ASYNC_CLK(1),
     .ADDRESS_WIDTH(9),
-    .S_AXIS_REGISTERED(1))
+    .M_AXIS_REGISTERED(1))
   u_async_fifo_adc (
 
     // AD9361 side
@@ -165,7 +165,7 @@ module rwt_common_adc_if (
     .s_axis_ready(adc_ready),
     .s_axis_valid(adc_valid_reg),
     .s_axis_data({adc_data_reg, adc_enable_reg}),
-    .s_axis_empty(),
+    .s_axis_full(),
     .s_axis_room(),
 
     // User Input Side
@@ -174,6 +174,7 @@ module rwt_common_adc_if (
     .m_axis_ready(m_user_ready),
     .m_axis_valid(m_user_valid),
     .m_axis_data({m_user_data, m_user_enables}),
+    .m_axis_empty(),
     .m_axis_level(m_user_level));
 
   /****************************************************************************
@@ -246,7 +247,7 @@ module rwt_common_adc_if (
     .DATA_WIDTH(65),
     .ASYNC_CLK(1),
     .ADDRESS_WIDTH(9),
-    .S_AXIS_REGISTERED(1))
+    .M_AXIS_REGISTERED(1))
   u_async_fifo_user (
 
     // User Output Side
@@ -255,7 +256,7 @@ module rwt_common_adc_if (
     .s_axis_ready(m_tag_ready),
     .s_axis_valid(m_tag_valid),
     .s_axis_data({m_tag_data, m_tag_last}),
-    .s_axis_empty(),
+    .s_axis_full(),
     .s_axis_room(),
 
     // DMA - side
@@ -264,6 +265,7 @@ module rwt_common_adc_if (
     .m_axis_ready(m_dma_ready),
     .m_axis_valid(m_dma_valid),
     .m_axis_data({m_dma_data, m_dma_last}),
+    .m_axis_empty(),
     .m_axis_level());
 
   assign m_dma_user[0] = 1'b1;

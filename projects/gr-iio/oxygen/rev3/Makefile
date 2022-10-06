@@ -1,4 +1,4 @@
-PROJECT_NAME := oxygen_griio
+PROJECT_NAME := oxygen_gr-iio
 M_CUSTOM_LIBS :=
 M_ADI_LIBS :=
 M_DEPS :=

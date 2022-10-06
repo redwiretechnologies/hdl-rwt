@@ -1,11 +1,12 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import argparse
 from lib.utilization_image_gen import *
 from lib.gen_markdown import *
 
 file_ext = '.utilization'
-selected_properties = { "Block RAM Tile": "BRAM",
+selected_properties = { "CLB": "CLB",
+                        "Block RAM Tile": "BRAM",
                         "LUT as Logic": "LUT",
                         "LUT as Memory": "LUTRAM",
                         "CLB Registers": "FF",

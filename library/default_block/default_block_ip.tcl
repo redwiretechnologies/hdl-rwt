@@ -15,12 +15,14 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 set src_files [list \
   "$ad_hdl_dir/library/common/up_axi.v" \
+  "$ad_hdl_dir/library/common/ad_iqcor.v" \
+  "$ad_hdl_dir/library/xilinx/common/ad_mul.v" \
   "$ad_hdl_dir/library/common/ad_mem.v" \
+  "$ad_hdl_dir/library/common/ad_mem_asym.v" \
   "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
   "$ad_hdl_dir/library/util_cdc/sync_event.v" \
   "$ad_hdl_dir/library/util_cdc/sync_gray.v" \
-  "$ad_hdl_dir/library/util_axis_fifo/address_gray_pipelined.v" \
-  "$ad_hdl_dir/library/util_axis_fifo/address_sync.v" \
+  "$ad_hdl_dir/library/util_axis_fifo/util_axis_fifo_address_generator.v" \
   "$ad_hdl_dir/library/util_axis_fifo/util_axis_fifo.v" \
   "$script_dir/../cic_filter/src/cic_filter.v" \
   "$ad_hdl_dir/library/axi_adc_decimate/axi_adc_decimate_filter.v" \

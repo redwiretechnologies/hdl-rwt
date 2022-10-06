@@ -129,14 +129,14 @@ module rwt_common_dac_if (
     .DATA_WIDTH(65),
     .ASYNC_CLK(1),
     .ADDRESS_WIDTH(9),
-    .S_AXIS_REGISTERED(1))
+    .M_AXIS_REGISTERED(1))
   u_async_fifo_dma (
     .s_axis_aclk(s_dma_aclk),
     .s_axis_aresetn(s_dma_aresetn),
     .s_axis_ready(s_dma_ready),
     .s_axis_valid(s_dma_valid),
     .s_axis_data({s_dma_data, s_dma_last}),
-    .s_axis_empty(),
+    .s_axis_full(),
     .s_axis_room(),
 
     .m_axis_aclk(m_tag_aclk),
@@ -144,6 +144,7 @@ module rwt_common_dac_if (
     .m_axis_ready(m_tag_ready),
     .m_axis_valid(m_tag_valid),
     .m_axis_data({m_tag_data, m_tag_last}),
+    .m_axis_empty(),
     .m_axis_level());
 
   /****************************************************************************
@@ -213,7 +214,7 @@ module rwt_common_dac_if (
     .DATA_WIDTH(64),
     .ASYNC_CLK(1),
     .ADDRESS_WIDTH(9),
-    .S_AXIS_REGISTERED(1))
+    .M_AXIS_REGISTERED(1))
   u_async_fifo_user (
 
     // User side
@@ -222,8 +223,9 @@ module rwt_common_dac_if (
     .s_axis_ready(s_user_ready),
     .s_axis_valid(s_user_valid),
     .s_axis_data(s_user_data),
-    .s_axis_empty(s_user_empty),
     .s_axis_room(s_user_room),
+    .s_axis_full(),
+    .m_axis_empty(s_user_empty),
 
     // 9361 Side
     .m_axis_aclk(dac_clk),

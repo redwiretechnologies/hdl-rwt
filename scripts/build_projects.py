@@ -38,7 +38,7 @@ def get_item_selection(selection_list, item_name, extra_text="", select_all = Fa
                 selected.append(selection_list[a])
     return selected
 
-def get_all_selections(all_carriers=False, all_revisions=False, all_personalities=False, all_boards=False, all_som_revisions=False, assume_same=False):
+def get_all_selections(all_carriers=False, all_revisions=False, all_personalities=False, all_boards=False, all_som_revisions=False):
     sc = get_item_selection([key for key in supported_builds.keys()], "Carrier", "", all_carriers)
     if not all_carriers:
         print("")
@@ -51,52 +51,46 @@ def get_all_selections(all_carriers=False, all_revisions=False, all_personalitie
         revs = get_item_selection(revisions, "Revision", " for Carrier {}".format(car), all_revisions)
         if not all_revisions:
             print("")
-        personalities = supported_builds[car]["images"]
-        boards = supported_builds[car]["boards"]
-        som_revisions = supported_builds[car]["som_rev"]
-
-        if assume_same:
-            if first_car == "":
-                persons = get_item_selection(personalities, "Personality", " for all selected revisions of all selected carriers", all_personalities)
-                if not all_personalities:
-                    print("")
-                bs = get_item_selection(boards, "Board", " for all personalities on all revisions of all selected carriers", all_boards)
+        for rev in revs:
+            deeper_selections = {}
+            if "special" in supported_builds[car].keys():
+                if rev in supported_builds[car]["special"].keys():
+                    personalities = supported_builds[car]["special"][rev]["images"]
+                    boards = supported_builds[car]["special"][rev]["boards"]
+                    som_revisions = supported_builds[car]["special"][rev]["som_rev"]
+                else:
+                    personalities = supported_builds[car]["images"]
+                    boards = supported_builds[car]["boards"]
+                    som_revisions = supported_builds[car]["som_rev"]
+            else:
+                personalities = supported_builds[car]["images"]
+                boards = supported_builds[car]["boards"]
+                som_revisions = supported_builds[car]["som_rev"]
+            persons = get_item_selection(personalities, "Personality", " for Revision {} of Carrier {}".format(rev, car), all_personalities)
+            if not all_personalities:
+                print("")
+            for person in persons:
                 deepest_selections = {}
+                if "special" in supported_builds[car].keys():
+                    if person in supported_builds[car]["special"].keys():
+                        boards = supported_builds[car]["special"][person]["boards"]
+                        som_revisions = supported_builds[car]["special"][person]["som_rev"]
+                    else:
+                        boards = supported_builds[car]["boards"]
+                        som_revisions = supported_builds[car]["som_rev"]
+                else:
+                    boards = supported_builds[car]["boards"]
+                    som_revisions = supported_builds[car]["som_rev"]
+                bs = get_item_selection(boards, "Board", " for Personality {} on Revision {} of Carrier {}".format(person, rev, car), all_boards)
+                if not all_boards:
+                    print("")
                 for b in bs:
-                    srevs = get_item_selection(som_revisions[b], "SOM Revision", " for board {} for all personalities on all revisions of all selected carriers".format(b), all_som_revisions)
+                    srevs = get_item_selection(som_revisions[b], "SOM Revision", " for Board {} for Personality {} on Revision {} of Carrier {}".format(b, person, rev, car), all_som_revisions)
                     if not all_som_revisions:
                         print("")
                     deepest_selections[b] = srevs
-                if not all_boards:
-                    print("")
-                deeper_selections = {}
-                for person in persons:
-                    deeper_selections[person] = deepest_selections
-                for rev in revs:
-                    selections[rev] = deeper_selections
-                first_car = car
-                first_rev = revs[0]
-            else:
-                for rev in revs:
-                    selections[rev] = all_selections[first_car][first_rev]
-        else:
-            for rev in revs:
-                deeper_selections = {}
-                persons = get_item_selection(personalities, "Personality", " for Revision {} of Carrier {}".format(rev, car), all_personalities)
-                if not all_personalities:
-                    print("")
-                for person in persons:
-                    deepest_selections = {}
-                    bs = get_item_selection(boards, "Board", " for Personality {} on Revision {} of Carrier {}".format(person, rev, car), all_boards)
-                    if not all_boards:
-                        print("")
-                    for b in bs:
-                        srevs = get_item_selection(som_revisions[b], "SOM Revision", " for Board {} for Personality {} on Revision {} of Carrier {}".format(b, person, rev, car), all_som_revisions)
-                        if not all_som_revisions:
-                            print("")
-                        deepest_selections[b] = srevs
-                    deeper_selections[person] = deepest_selections
-                selections[rev] = deeper_selections
+                deeper_selections[person] = deepest_selections
+            selections[rev] = deeper_selections
         all_selections[car] = selections
     return all_selections
 
@@ -109,14 +103,20 @@ def cd_to_dir(script_dir, carrier, revision, personality, dry_run):
     print("Moved to directory {}/{}/{}".format(personality, carrier, revision))
 
 # Make a singular library
-def make_library(dry_run, n=1):
+def make_library(clean, dry_run, n=1):
     print("Making library")
     if dry_run:
         ret = 0
-        print("make -j {} lib | sed 's/^/  /'".format(n))
+        if clean:
+            print("make -j {} clean-libs | sed 's/^/  /'".format(n))
+        else:
+            print("make -j {} lib | sed 's/^/  /'".format(n))
     else:
         try:
-            proc = subprocess.Popen(["make", "-j", str(n), "lib"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            if clean:
+                proc = subprocess.Popen(["make", "-j", str(n), "clean-libs"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            else:
+                proc = subprocess.Popen(["make", "-j", str(n), "lib"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             proc2 = subprocess.Popen(["sed", 's/^/  /'], stdin=proc.stdout, stdout=subprocess.PIPE)
             ret = proc.wait()
             if ret != 0:
@@ -133,17 +133,20 @@ def make_library(dry_run, n=1):
     return ret
 
 # Construct the proper argument to pass to make for the given boards
-def create_board_list(boards, projects_only):
+def create_board_list(boards, projects_only, clean):
     interm_board_list = []
     for board, srevs in boards.items():
         for srev in srevs:
             interm_board_list.append("{}-{}".format(board, srev))
     board_list = []
     projects = ""
+    clean_str = ""
     if projects_only:
         projects = "proj-"
+    if clean:
+        clean_str = "clean-"
     for b in interm_board_list:
-        board_list.append(projects+b)
+        board_list.append(projects+clean_str+b)
     return board_list
 
 # Make a singular board
@@ -191,14 +194,14 @@ def cd_and_make(carrier, revision, personality, board_list, dry_run):
             os.chdir(cwd)
 
 # Create the list of builds to be done
-def iterate_selections(selections, projects_only, dry_run):
+def iterate_selections(selections, projects_only, clean, dry_run):
     lib_list = []
     build_list = []
     for carrier, val in selections.items():
         for revision, val2 in val.items():
             for personality, boards in val2.items():
-                lib_list.append([carrier, revision, personality, dry_run])
-                for b in create_board_list(boards, projects_only):
+                lib_list.append([carrier, revision, personality, clean, dry_run])
+                for b in create_board_list(boards, projects_only, clean):
                     build_list.append([carrier, revision, personality, b, dry_run])
     return lib_list, build_list
 
@@ -208,9 +211,12 @@ def cd_and_make_lib(arguments, n):
     script_path = os.path.abspath(__file__)
     script_dir = os.path.dirname(script_path)
 
-    cd_to_dir(script_dir, *arguments)
+    stripped_lib = arguments[0:3]
+    stripped_lib.append(arguments[-1])
 
-    ret = make_library(arguments[-1], n)
+    cd_to_dir(script_dir, *stripped_lib)
+
+    ret = make_library(arguments[-2], arguments[-1], n)
     os.chdir(cwd)
 
     return ret
@@ -250,22 +256,55 @@ def parse_args():
     parser.add_argument("-b", "--boards", help="Automatically select all boards", action="store_true")
     parser.add_argument("-s", "--som_revisions", help="Automatically select all som_revisions", action="store_true")
     parser.add_argument("-o", "--only_projects", help="Only create projects", action="store_true")
-    parser.add_argument("-a", "--assume_same", help="Assume the same personality and board choices for each selected carrier and revision", action="store_true")
+    parser.add_argument("--clean", help="Clean instead of creating projects", action="store_true")
     parser.add_argument("-d", "--dry_run", help="Don't actually run any commands. Just print them", action="store_true")
     parser.add_argument("-n", "--num_builds", type=int, default=1, help="Number of simultaneous make commands to run.")
+    parser.add_argument("-g", "--git_log", help="Create a log of the git repos to put into each xsa file", action="store_true")
     args = parser.parse_args()
     return args
+
+def create_git_log():
+    cwd = os.getcwd()
+    script_path = os.path.abspath(__file__)
+    script_dir = os.path.dirname(script_path)
+    os.system(script_dir + "/create_git_log.sh")
+
+# Create the list of builds to be done
+def git_log_iterate_selections(selections):
+    build_list = []
+    for carrier, val in selections.items():
+        for revision, val2 in val.items():
+            for personality, val3 in val2.items():
+                for board, som_rev in val3.items():
+                    for s in som_rev:
+                        build_list.append([str(personality), str(carrier), str(revision), "build", str(board), str(s)])
+    return build_list
+
+def add_git_log(selections):
+    cwd = os.getcwd()
+    script_path = os.path.abspath(__file__)
+    script_dir = os.path.dirname(script_path)
+
+    build_list = git_log_iterate_selections(selections)
+
+    for b in build_list:
+        build_dir = script_dir + "/../projects/" + '/'.join(b)
+        subprocess.call("/bin/bash -c 'zip -u {}/*.sdk/*.xsa git_log.txt > /dev/null'".format(build_dir), shell=True)
 
 def main():
     args = parse_args()
     try:
-        selections = get_all_selections(args.carriers, args.revisions, args.personalities, args.boards, args.som_revisions, False)
+        if args.git_log:
+            create_git_log()
+        selections = get_all_selections(args.carriers, args.revisions, args.personalities, args.boards, args.som_revisions)
     except KeyboardInterrupt:
         print("")
         print("Received keyboard interrupt. Terminating")
         exit(1)
-    lib_list, build_list = iterate_selections(selections, args.only_projects, args.dry_run)
+    lib_list, build_list = iterate_selections(selections, args.only_projects, args.clean, args.dry_run)
     multi_process_builds(args.num_builds, lib_list, build_list)
+    if args.git_log:
+        add_git_log(selections)
 
 if __name__=="__main__":
     main()

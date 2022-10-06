@@ -1,9 +1,6 @@
-export ADI_SRC_TREE := $(abspath ../../../hdl-adi)
-export ADI_LIB_DIR := $(ADI_SRC_TREE)/library
+LIB_NAME = default_block
 
 M_DEPS = \
-  $(ADI_LIB_DIR)/scripts/adi_env.tcl \
-  $(ADI_LIB_DIR)/scripts/adi_ip_xilinx.tcl \
   ../cic_filter/src/cic_filter.v \
   $(ADI_LIB_DIR)/axi_adc_decimate/axi_adc_decimate_filter.v \
   src/default_block.v \
@@ -37,17 +34,4 @@ M_DEPS = \
   ../sim/rwt.sv \
   ../sim/rwt_up_lib.sv
 
-M_VIVADO := vivado -mode batch -source
-
-.PHONY: all clean clean-all
-all: build/default_block.xpr
-
-clean:clean-all
-
-clean-all:
-	rm -rf build
-
-build/default_block.xpr: $(M_DEPS)
-	-rm -rf build
-	mkdir -p build
-	cd build && $(M_VIVADO) ../default_block_ip.tcl -tclargs $(ADI_LIB_DIR) >> build.log 2>&1
+include ../scripts/library.mk

@@ -13,7 +13,7 @@ source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
 adi_ip_create concat_9361
 adi_ip_files concat_9361 [list \
-  "$script_dir/concat_9361.v" \
+  "$script_dir/src/concat_9361.v" \
   "$script_dir/concat_9361_constr.xdc" ]
 
 adi_ip_properties_lite concat_9361

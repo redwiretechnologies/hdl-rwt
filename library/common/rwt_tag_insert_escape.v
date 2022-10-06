@@ -91,14 +91,14 @@ module rwt_tag_insert_escape #(
     .DATA_WIDTH(DWIDTH+1),
     .ASYNC_CLK(0),
     .ADDRESS_WIDTH(2),
-    .S_AXIS_REGISTERED(1))
+    .M_AXIS_REGISTERED(1))
   sync_fifo (
     .s_axis_aclk(clk),
     .s_axis_aresetn(aresetn),
     .s_axis_ready(fifo_ready),
     .s_axis_valid(fifo_valid),
     .s_axis_data({fifo_data, fifo_last}),
-    .s_axis_empty(),
+    .s_axis_full(),
     .s_axis_room(),
 
     .m_axis_aclk(clk),
@@ -106,6 +106,7 @@ module rwt_tag_insert_escape #(
     .m_axis_ready(m_axi_ready),
     .m_axis_valid(m_axi_valid),
     .m_axis_data({m_axi_data, m_axi_last}),
+    .m_axis_empty(),
     .m_axis_level());
 
 endmodule

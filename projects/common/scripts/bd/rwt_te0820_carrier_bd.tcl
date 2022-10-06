@@ -56,9 +56,17 @@ ad_ip_parameter sys_ps8 CONFIG.PSU__GPIO_EMIO__PERIPHERAL__ENABLE 1
 ad_ip_parameter sys_ps8 CONFIG.PSU__ENET3__PERIPHERAL__ENABLE 0
 
 set_property -dict [list \
-  CONFIG.PSU__USB3_0__PERIPHERAL__ENABLE 1 \
+  CONFIG.PSU__GPIO0_MIO__PERIPHERAL__ENABLE {1} \
+] [get_bd_cells sys_ps8]
+
+set_property -dict [list \
+  CONFIG.PSU__USB0__PERIPHERAL__ENABLE {1} \
+  CONFIG.PSU__USB3_0__PERIPHERAL__ENABLE {1} \
   CONFIG.PSU__USB0__REF_CLK_FREQ {100} \
   CONFIG.PSU__USB3_0__PERIPHERAL__IO {GT Lane2} \
+  CONFIG.PSU__USB0__RESET__ENABLE {1} \
+  CONFIG.PSU__USB0__RESET__IO {MIO 25} \
+  CONFIG.PSU__USB__RESET__MODE {Separate MIO Pin} \
 ] [get_bd_cells sys_ps8]
 
 set_property -dict [list \
@@ -76,14 +84,36 @@ ad_ip_instance proc_sys_reset user_rstgen
 ad_ip_parameter user_rstgen CONFIG.C_EXT_RST_WIDTH 1
 
 set_property -dict [list \
+  CONFIG.PSU__I2C0__PERIPHERAL__ENABLE {1} \
+  CONFIG.PSU__I2C0__PERIPHERAL__IO {MIO 38 .. 39} \
+] [get_bd_cells sys_ps8]
+
+set_property -dict [list \
   CONFIG.PSU__I2C1__PERIPHERAL__ENABLE {1} \
   CONFIG.PSU__I2C1__PERIPHERAL__IO {MIO 28 .. 29} \
+] [get_bd_cells sys_ps8]
+
+set_property -dict [list \
+  CONFIG.PSU__UART0__PERIPHERAL__ENABLE {1} \
+  CONFIG.PSU__UART0__PERIPHERAL__IO {MIO 30 .. 31} \
 ] [get_bd_cells sys_ps8]
 
 set_property -dict [list \
   CONFIG.PSU__UART1__PERIPHERAL__ENABLE {1} \
   CONFIG.PSU__UART1__PERIPHERAL__IO {EMIO} \
   CONFIG.PSU__UART1__BAUD_RATE {115200}
+] [get_bd_cells sys_ps8]
+
+set_property -dict [list \
+  CONFIG.PSU__SD0__PERIPHERAL__ENABLE {1} \
+  CONFIG.PSU__SD0__SLOT_TYPE {eMMC} \
+  CONFIG.PSU__SD0__RESET__ENABLE {1} \
+] [get_bd_cells sys_ps8]
+
+set_property -dict [list \
+  CONFIG.PSU__SD1__PERIPHERAL__ENABLE {1} \
+  CONFIG.PSU__SD1__PERIPHERAL__IO {MIO 46 .. 51} \
+  CONFIG.PSU__SD1__SLOT_TYPE {SD 2.0} \
 ] [get_bd_cells sys_ps8]
 
 set_property -dict [list \
@@ -99,6 +129,24 @@ set_property -dict [list \
   CONFIG.PSU__PMU__GPO3__ENABLE {0} \
   CONFIG.PSU__PMU__GPO4__ENABLE {0} \
   CONFIG.PSU__PMU__GPO5__ENABLE {0} \
+] [get_bd_cells sys_ps8]
+
+set_property -dict [list \
+  CONFIG.PSU__QSPI__PERIPHERAL__ENABLE {1} \
+  CONFIG.PSU__QSPI__PERIPHERAL__MODE {Dual Parallel} \
+  CONFIG.PSU__QSPI__GRP_FBCLK__ENABLE {1} \
+] [get_bd_cells sys_ps8]
+
+set_property -dict [list \
+  CONFIG.PSU__SWDT0__PERIPHERAL__ENABLE {1} \
+  CONFIG.PSU__SWDT1__PERIPHERAL__ENABLE {1} \
+] [get_bd_cells sys_ps8]
+
+set_property -dict [list \
+  CONFIG.PSU__TTC0__PERIPHERAL__ENABLE {1} \
+  CONFIG.PSU__TTC1__PERIPHERAL__ENABLE {1} \
+  CONFIG.PSU__TTC2__PERIPHERAL__ENABLE {1} \
+  CONFIG.PSU__TTC3__PERIPHERAL__ENABLE {1} \
 ] [get_bd_cells sys_ps8]
 
 # system reset/clock definitions
