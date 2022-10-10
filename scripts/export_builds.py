@@ -17,7 +17,7 @@ def parse_args():
     parser.add_argument("-x", "--exclude", default='', help="A string that must not be contained in the filepath to the image")
     parser.add_argument("-v", "--verbose", action="store_true", help="Print the exported files")
     parser.add_argument("-c", "--convert", action="store_true", help="Convert to download.bin")
-    parser.add_argument("-t", "--style", default='crpbs', help="Convert to download.bin")
+    parser.add_argument("-t", "--style", default='crpbs', help="A directory sorting order. The default value is crpbs representing the file hierarchy [carrier board]/[carrier board revision]/[personality]/[SOM]/[SOM revision]. Reordering the characters in the string will reorder the hierarchy accordingly.")
     args = parser.parse_args()
     return args
 

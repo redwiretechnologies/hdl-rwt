@@ -1,6 +1,6 @@
 #!/bin/bash
 
-XILINX_SDK=/opt/Xilinx/Vitis/2019.2
+XILINX_SDK=/opt/Xilinx/Vitis/2020.2
 
 if [ "$#" -ne 1 ]; then
     echo "Missing XSA file"
