@@ -8,13 +8,15 @@
   .``prefix``valid(dac_if.valid)
 
 
-interface rwt_dac_lib();
+interface rwt_dac_lib #(
+    parameter MAX_CHANNELS=4)
+    ();
 
-  logic        clk = 'd0;
-  logic [63:0] data = 'd0;
-  logic [3:0]  enable = 'd0;
-  logic [3:0]  valid = 'd0;
-  logic        stop = 1'b0;
+  logic                       clk = 'd0;
+  logic [MAX_CHANNELS*16-1:0] data = 'd0;
+  logic [MAX_CHANNELS-1:0]    enable = 'd0;
+  logic [MAX_CHANNELS-1:0]    valid = 'd0;
+  logic                       stop = 1'b0;
 
   task automatic reset();
     begin
@@ -26,14 +28,15 @@ interface rwt_dac_lib();
   endtask
 
   task automatic file_sink(
-    input string      filename,
-    input int         samp_rate,
-    input int         file_num_channels = 4,
-    input logic       binary = 1,
-    input logic [3:0] enable_mask = 4'hf);
+    input string                   filename,
+    input int                      samp_rate,
+    input int                      file_num_channels = MAX_CHANNELS,
+    input logic                    binary = 1,
+    input logic [MAX_CHANNELS-1:0] enable_mask = ~0);
+
     begin
 
-      assert((file_num_channels >= 1) && (file_num_channels <= 4));
+      assert((file_num_channels >= 1) && (file_num_channels <= MAX_CHANNELS));
 
       fork
         begin

@@ -10,13 +10,15 @@
   .``prefix``valid(adc_if.valid)
 
 
-interface rwt_adc_lib();
+interface rwt_adc_lib #(
+    parameter MAX_CHANNELS=4)
+    ();
 
-  logic        clk = 'd0;
-  logic [63:0] data = 'd0;
-  logic [3:0]  enable = 'd0;
-  logic [3:0]  valid = 'd0;
-  logic        stop = 1'b0;
+  logic                       clk = 'd0;
+  logic [MAX_CHANNELS*16-1:0] data = 'd0;
+  logic [MAX_CHANNELS-1:0]    enable = 'd0;
+  logic [MAX_CHANNELS-1:0]    valid = 'd0;
+  logic                       stop = 1'b0;
 
   task automatic reset();
     begin
@@ -35,12 +37,12 @@ interface rwt_adc_lib();
   endtask;
 
   task automatic file_source(
-    input string      filename,
-    input int         samp_rate,
-    input int         file_num_channels = 4,
-    input logic       binary = 1,
-    input logic [3:0] enable_mask = 4'hf,
-    input logic       cyclic = 0);
+    input string                   filename,
+    input int                      samp_rate,
+    input int                      file_num_channels = MAX_CHANNELS,
+    input logic                    binary = 1,
+    input logic [MAX_CHANNELS-1:0] enable_mask = ~0,
+    input logic                    cyclic = 0);
     begin
 
       logic done = 0;
@@ -48,7 +50,7 @@ interface rwt_adc_lib();
 
       stop = 0;
 
-      assert((file_num_channels >= 1) && (file_num_channels <= 4));
+      assert((file_num_channels >= 1) && (file_num_channels <= MAX_CHANNELS));
 
       fork
         begin
@@ -76,7 +78,7 @@ interface rwt_adc_lib();
           do begin
             int   idx = 0;
             int   ret;
-            logic [15:0] samples[0:3];
+            logic [15:0] samples[0:MAX_CHANNELS-1];
             parse_line_type_t line_type;
 
             if (fd == 0)
@@ -85,7 +87,7 @@ interface rwt_adc_lib();
             while ((!stop) && (fd != 0) && !$feof(fd)) begin
               idx++;
 
-              parse_adc #(4)::parse(
+              parse_adc #(MAX_CHANNELS)::parse(
                 fd, 0, binary, line_type, file_num_channels, samples);
 
               if (line_type == BLANK) begin

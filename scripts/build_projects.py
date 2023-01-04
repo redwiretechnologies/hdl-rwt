@@ -234,6 +234,8 @@ def cd_and_make_board(arguments):
 
     make_board(*arguments)
     os.chdir(cwd)
+    print("Completed "+" ".join(arguments[0:-2]))
+    return True
 
 def multi_process_builds(n, libs, builds):
     pool = multiprocessing.Pool(n)
@@ -246,7 +248,9 @@ def multi_process_builds(n, libs, builds):
             for b in builds:
                 if lib[0:3] == b[0:3]:
                     builds.remove(b)
-    pool.map(cd_and_make_board, builds)
+    r = pool.imap(cd_and_make_board, builds)
+    pool.close()
+    pool.join()
 
 def parse_args():
     parser = argparse.ArgumentParser()
