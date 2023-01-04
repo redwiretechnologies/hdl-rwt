@@ -924,12 +924,12 @@ from . import oot_builds
 
 elephant_dict = {  "oxygen"   : {
                                  "images"  : ["elephant"],
-								 "special" : {
-											  "elephant": {
-															"boards" : ["3eg"],
-															"som_rev": ["2.0"],
-														  },
-											 },
+				 "special" : {
+					      "elephant": {
+							   "boards" : ["3eg"],
+							   "som_rev": ["2.0"],
+							  },
+					     },
                                 }
                 }
 
