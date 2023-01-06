@@ -14,8 +14,6 @@ set_property -dict {PACKAGE_PIN N7  IOSTANDARD LVCMOS18} [get_ports {gpio_hdr[8]
 set_property -dict {PACKAGE_PIN AH7 IOSTANDARD LVCMOS18} [get_ports {gpio_hdr[9]}]
 set_property -dict {PACKAGE_PIN K1  IOSTANDARD LVCMOS18} [get_ports {gpio_hdr[10]}]
 set_property -dict {PACKAGE_PIN AE7 IOSTANDARD LVCMOS18} [get_ports {gpio_hdr[11]}]
-set_property -dict {PACKAGE_PIN L1  IOSTANDARD LVCMOS18} [get_ports {gpio_hdr[12]}]
-set_property -dict {PACKAGE_PIN AD7 IOSTANDARD LVCMOS18} [get_ports {gpio_hdr[13]}]
 
 ################################################################################
 ## RF GPIO
