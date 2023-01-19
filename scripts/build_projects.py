@@ -234,7 +234,7 @@ def cd_and_make_board(arguments):
 
     make_board(*arguments)
     os.chdir(cwd)
-    print("Completed "+" ".join(arguments[0:-2]))
+    print("Completed "+" ".join(arguments[0:-1]))
     return True
 
 def multi_process_builds(n, libs, builds):
