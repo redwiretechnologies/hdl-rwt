@@ -194,13 +194,13 @@ def cd_and_make(carrier, revision, personality, board_list, dry_run):
             os.chdir(cwd)
 
 # Create the list of builds to be done
-def iterate_selections(selections, projects_only, clean, dry_run):
+def iterate_selections(selections, projects_only, clean, clean_lib, dry_run):
     lib_list = []
     build_list = []
     for carrier, val in selections.items():
         for revision, val2 in val.items():
             for personality, boards in val2.items():
-                lib_list.append([carrier, revision, personality, clean, dry_run])
+                lib_list.append([carrier, revision, personality, clean_lib, dry_run])
                 for b in create_board_list(boards, projects_only, clean):
                     build_list.append([carrier, revision, personality, b, dry_run])
     return lib_list, build_list
@@ -261,6 +261,7 @@ def parse_args():
     parser.add_argument("-s", "--som_revisions", help="Automatically select all som_revisions", action="store_true")
     parser.add_argument("-o", "--only_projects", help="Only create projects", action="store_true")
     parser.add_argument("--clean", help="Clean instead of creating projects", action="store_true")
+    parser.add_argument("--clean_lib", help="Clean libraries instead of creating projects", action="store_true")
     parser.add_argument("-d", "--dry_run", help="Don't actually run any commands. Just print them", action="store_true")
     parser.add_argument("-n", "--num_builds", type=int, default=1, help="Number of simultaneous make commands to run.")
     parser.add_argument("-g", "--git_log", help="Create a log of the git repos to put into each xsa file", action="store_true")
@@ -305,7 +306,7 @@ def main():
         print("")
         print("Received keyboard interrupt. Terminating")
         exit(1)
-    lib_list, build_list = iterate_selections(selections, args.only_projects, args.clean, args.dry_run)
+    lib_list, build_list = iterate_selections(selections, args.only_projects, args.clean, args.clean_lib, args.dry_run)
     multi_process_builds(args.num_builds, lib_list, build_list)
     if args.git_log:
         add_git_log(selections)
