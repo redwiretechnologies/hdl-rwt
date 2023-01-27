@@ -2,6 +2,7 @@ export ADI_SRC_TREE := $(abspath ../../../../../hdl)
 
 export ADI_PROJ_DIR := $(ADI_SRC_TREE)/projects
 export ADI_LIB_DIR := $(ADI_SRC_TREE)/library
+export ADI_IGNORE_VERSION_CHECK := 1
 
 M_VIVADO := vivado -mode batch -source
 
