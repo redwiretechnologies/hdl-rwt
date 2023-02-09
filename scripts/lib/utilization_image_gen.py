@@ -18,7 +18,7 @@ def gen_images(root_copy_dir, fi, verbose, dry_run, selected_properties, headers
                 new_row = [ s.strip() for s in row ]
                 if new_row[0] in selected_properties.keys():
                     if new_row[0] not in data.keys():
-                        del new_row[2]
+                        del new_row[2:4]
                         data.update({selected_properties[new_row[0]]: new_row[1:]})
 
         p = PrettyTable(headers)
@@ -31,7 +31,7 @@ def gen_images(root_copy_dir, fi, verbose, dry_run, selected_properties, headers
         imgkit.from_string(p.get_html_string(attributes={"style":"margin-left:auto;margin-right:auto;width:500px"}), "{}table.jpg".format(image_file_path), options={'crop-x':'250', 'crop-w':'525', 'log-level':'none'})
 
         df = pd.DataFrame.from_dict(data, orient='index', columns=headers[1:])
-        labels = [float(f) for f in df[headers[3]].values]
+        labels = [float(''.join(c for c in f if (c.isdigit() or c =='.'))) for f in df[headers[3]].values]
         fig, ax = plt.subplots()
         ax.bar(df.index.values, labels)
         ax.set_title('Resource Utilization')
