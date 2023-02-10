@@ -229,7 +229,7 @@ In this way, the user can more easily keep track of the state of repositories at
 
 **USAGE**:    
 ```
-usage: build_projects.py [-h] [-c] [-r] [-p] [-b] [-s] [-o] [--clean] [-d] [-n NUM_BUILDS] [-g]
+usage: build_projects.py [-h] [-c] [-r] [-p] [-b] [-s] [-o] [--clean] [--clean_lib] [-d] [-n NUM_BUILDS] [-g]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -240,6 +240,7 @@ optional arguments:
   -s, --som_revisions   Automatically select all som_revisions
   -o, --only_projects   Only create projects
   --clean               Clean instead of creating projects
+  --clean_lib           Clean libraries instead of creating projects 
   -d, --dry_run         Don't actually run any commands. Just print them
   -n NUM_BUILDS, --num_builds NUM_BUILDS
                         Number of simultaneous make commands to run.
