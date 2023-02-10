@@ -16,10 +16,10 @@ For issues with this repository, its documentation, or additional questions, ple
 # Requirements
 
 * Linux OS
-* Vivado 2020.2
+* Vivado 2021.2
 * git
 * make
-* Analog Devices [hdl](https://github.com/analogdevicesinc/hdl/tree/1fe0d5f8e00b119a5a389213cf05e9db4646c86a) (Please note that this is the specific commit that builds have been tested against) checked out into the same folder as `hdl-rwt`
+* Analog Devices [hdl](https://github.com/analogdevicesinc/hdl/tree/2021_r1) (Please note that this is the specific commit that builds have been tested against) checked out into the same folder as `hdl-rwt`
 * Python 3.x
 * Python Libraries
     * Subprocess
@@ -45,7 +45,7 @@ For issues with this repository, its documentation, or additional questions, ple
         * gi
         * sys
 * For generating DTS for created projects
-    * [device-tree-xlnx](https://github.com/Xilinx/device-tree-xlnx/tree/xilinx-v2020.2) (Please note that this is the specific required commit for this version of Vivado)
+    * [device-tree-xlnx](https://github.com/Xilinx/device-tree-xlnx/tree/xilinx_v2021.2) (Please note that this is the specific required commit for this version of Vivado)
 
 --- 
 
@@ -229,7 +229,7 @@ In this way, the user can more easily keep track of the state of repositories at
 
 **USAGE**:    
 ```
-usage: build_projects.py [-h] [-c] [-r] [-p] [-b] [-s] [-o] [--clean] [-d] [-n NUM_BUILDS] [-g]
+usage: build_projects.py [-h] [-c] [-r] [-p] [-b] [-s] [-o] [--clean] [--clean_lib] [-d] [-n NUM_BUILDS] [-g]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -240,6 +240,7 @@ optional arguments:
   -s, --som_revisions   Automatically select all som_revisions
   -o, --only_projects   Only create projects
   --clean               Clean instead of creating projects
+  --clean_lib           Clean libraries instead of creating projects 
   -d, --dry_run         Don't actually run any commands. Just print them
   -n NUM_BUILDS, --num_builds NUM_BUILDS
                         Number of simultaneous make commands to run.
