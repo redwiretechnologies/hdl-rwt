@@ -3,7 +3,7 @@ export ADI_LIB_DIR := $(ADI_SRC_TREE)/library
 
 M_VIVADO := vivado -mode batch -source
 
-M_DEPS := \
+M_DEPS += \
   $(ADI_LIB_DIR)/scripts/adi_env.tcl \
   $(ADI_LIB_DIR)/scripts/adi_ip_xilinx.tcl \
 
