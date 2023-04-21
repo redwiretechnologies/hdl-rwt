@@ -20,7 +20,7 @@ reg [$clog2(NUM_INPUTS+2)-1:0] current_id;
 
 wire [NUM_INPUTS+1:0] input_lines_extra;
 
-assign input_lines_extra = {input_lines, 'b1, 'b0};
+assign input_lines_extra = {input_lines, 1'b1, 1'b0};
 assign o = input_lines_extra[current_id];
 
 always @(clk, rstn)

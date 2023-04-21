@@ -10,8 +10,8 @@ module line_matrix #(
     input  [NUM_INPUTS-1:0]  input_lines,
     output [NUM_OUTPUTS-1:0] output_lines,
 
-    input  [$clog2(NUM_INPUTS)-1:0]  input_select,
-    input  [$clog2(NUM_OUTPUTS)-1:0] output_select
+    input  [$clog2(NUM_INPUTS+2)-1:0]  input_select,
+    input  [$clog2(NUM_OUTPUTS)-1:0]   output_select
 );
 
     genvar i;
@@ -22,7 +22,7 @@ module line_matrix #(
             line_mux   #( .NUM_INPUTS(NUM_INPUTS),
                           .NUM_OUTPUTS(NUM_OUTPUTS),
                           .ID(i))
-                        ( .clk(clk),
+                    lm0 ( .clk(clk),
                           .rstn(rstn),
                           .input_select(input_select),
                           .output_select(output_select),

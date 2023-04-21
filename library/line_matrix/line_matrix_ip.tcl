@@ -11,11 +11,15 @@ set script_dir [ file dirname [ file normalize [ info script ] ] ]
 source $AD_LIB_DIR/scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
+set sim_files [list \
+    "$script_dir/sim/line_matrix.sv" ]
+
 adi_ip_create line_matrix
 adi_ip_files line_matrix [list \
   "$script_dir/src/line_matrix.v" \
   "$script_dir/src/line_mux.v" \
   "$script_dir/line_matrix_constr.xdc" ]
+add_files -norecurse -scan_for_includes -fileset [get_filesets sim_1] $sim_files
 
 adi_ip_properties_lite line_matrix
 
