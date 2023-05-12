@@ -27,6 +27,11 @@ git_print () {
     echo "------------------------------------------------------------------------------------------" >> $2
 }
 
+if [ -f git_log.txt ]; then
+    echo "git_log.txt already exists! To recreate it, please delete the file"
+    exit 0
+fi
+
 d=$(date)
 echo "Build date: $d" > git_log.txt
 echo "" >> git_log.txt
@@ -43,3 +48,5 @@ done
 builtin cd ..
 echo "------------------------------------------------------------------------------------------" >> git_log.txt
 ./scripts/link_oot.sh
+
+sed '/^$/d' git_log.txt | sed -z 's/\n-\+\n-\+\n/~/g' | sed -z 's/\s*Build date:\s*//g' | sed 's/^\s*commit\s*//g' | sed 's/^\s*Date:\s*//g' | sed -z 's/\n\s*/|/g' | sed 's/~$/\n/g' | sed 's/~/\n~/g' > git_log_compressed.txt

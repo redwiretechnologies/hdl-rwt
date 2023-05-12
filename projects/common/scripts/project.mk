@@ -3,8 +3,13 @@ export ADI_SRC_TREE := $(abspath ../../../../../hdl)
 export ADI_PROJ_DIR := $(ADI_SRC_TREE)/projects
 export ADI_LIB_DIR := $(ADI_SRC_TREE)/library
 export ADI_IGNORE_VERSION_CHECK := 1
+export ADI_USE_OOC_SYNTHESIS := n
 
 M_VIVADO := vivado -mode batch -source
+
+ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
+M_REPOS += hdl-rwt
 
 M_DEPS += $(ADI_PROJ_DIR)/scripts/adi_project_xilinx.tcl
 M_DEPS += $(ADI_PROJ_DIR)/scripts/adi_env.tcl
@@ -15,6 +20,11 @@ M_DEPS += $(ADI_LIB_DIR)/axi_ad9361/axi_ad9361_delay.tcl
 M_DEPS += $(foreach lib,$(M_ADI_LIBS),$(subst ^^,$(lastword $(subst /, ,$(lib))),$(subst %%,$(lib), $(ADI_LIB_DIR)/%%/^^.xpr)))
 M_DEPS += $(foreach lib,$(M_CUSTOM_LIBS),$(subst ^^,$(lastword $(subst /, ,$(lib))),$(subst %%,$(lib), ../../../../library/%%/build/^^.xpr)))
 
+.PHONY: dependencies
+
+dependencies:
+	@echo $(PROJECT_NAME) -- $(sort $(M_REPOS))
+
 define BOARD_template =
 
 .PHONY: $(1)-$(2) proj-$(1)-$(2) clean-$(1)-$(2)
@@ -24,6 +34,7 @@ $(1)-$(2): build/$(1)/$(2)/$(PROJECT_NAME).sdk/system_top.xsa
 build/$(1)/$(2)/$(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
 	-rm -rf build/$(1)/$(2)
 	mkdir -p build/$(1)/$(2)
+	cd ../../../.. && ./scripts/git_log_pers.sh $(ROOT_DIR)/build/$(1)/$(2)/git_log.txt "$(PROJECT_NAME)&$(REVISION)&$(1)&$(2)" $(sort $(M_REPOS))
 	cd build/$(1)/$(2) && $(M_VIVADO) ../../../system_project.tcl -tclargs $(ADI_PROJ_DIR) $(1) $(2)\
 		>> build.log 2>&1
 
@@ -32,6 +43,7 @@ proj-$(1)-$(2): build/$(1)/$(2)/$(PROJECT_NAME).xpr
 build/$(1)/$(2)/$(PROJECT_NAME).xpr: $(M_DEPS)
 	-rm -rf build/$(1)/$(2)
 	mkdir -p build/$(1)/$(2)
+	cd ../../../.. && ./scripts/git_log_pers.sh $(ROOT_DIR)/build/$(1)/$(2)/git_log.txt "$(PROJECT_NAME)&$(REVISION)&$(1)&$(2)" $(sort $(M_REPOS))
 	cd build/$(1)/$(2) && $(M_VIVADO) ../../../system_project.tcl -tclargs $(ADI_PROJ_DIR) $(1) $(2) --project-only
 
 clean-$(1)-$(2):

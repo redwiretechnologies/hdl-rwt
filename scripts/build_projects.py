@@ -174,6 +174,19 @@ def make_board(carrier, revision, personality, b, dry_run):
     if ret != 0:
         print("ERROR: Failed to make Personality {} for Carrier {} {} and Board {}!!".format(personality, carrier, revision, b))
 
+def show_depends():
+    try:
+        proc = subprocess.Popen(['make', 'dependencies'], shell=False)
+        proc.communicate()
+        ret = proc.wait()
+        proc = None
+    except KeyboardInterrupt:
+        if proc != None:
+            proc.kill()
+        print("")
+        print("Received keyboard interrupt. Terminating")
+        exit(1)
+
 # Function originally intended for single core usage
 def cd_and_make(carrier, revision, personality, board_list, dry_run):
     cwd = os.getcwd()
@@ -237,6 +250,22 @@ def cd_and_make_board(arguments):
     print("Completed "+" ".join(arguments[0:-1]))
     return True
 
+# cd to an individual carrier, revision, personality and show dependencies
+def cd_and_show_depends(arguments):
+    cwd = os.getcwd()
+    script_path = os.path.abspath(__file__)
+    script_dir = os.path.dirname(script_path)
+
+    stripped_lib = arguments[0:3]
+    stripped_lib.append(arguments[-1])
+
+    cd_to_dir(script_dir, *stripped_lib)
+
+    show_depends()
+    print("")
+    os.chdir(cwd)
+    return True
+
 def multi_process_builds(n, libs, builds):
     pool = multiprocessing.Pool(n)
     results = []
@@ -249,6 +278,12 @@ def multi_process_builds(n, libs, builds):
                 if lib[0:3] == b[0:3]:
                     builds.remove(b)
     r = pool.imap(cd_and_make_board, builds)
+    pool.close()
+    pool.join()
+
+def multi_process_depends(n, libs):
+    pool = multiprocessing.Pool(n)
+    r = pool.imap(cd_and_show_depends, libs)
     pool.close()
     pool.join()
 
@@ -265,6 +300,7 @@ def parse_args():
     parser.add_argument("-d", "--dry_run", help="Don't actually run any commands. Just print them", action="store_true")
     parser.add_argument("-n", "--num_builds", type=int, default=1, help="Number of simultaneous make commands to run.")
     parser.add_argument("-g", "--git_log", help="Create a log of the git repos to put into each xsa file", action="store_true")
+    parser.add_argument("--depends", help="Show dependencies for each project based on the M_REPOS variable", action="store_true")
     args = parser.parse_args()
     return args
 
@@ -294,7 +330,7 @@ def add_git_log(selections):
 
     for b in build_list:
         build_dir = script_dir + "/../projects/" + '/'.join(b)
-        subprocess.call("/bin/bash -c 'zip -u {}/*.sdk/*.xsa git_log.txt > /dev/null'".format(build_dir), shell=True)
+        subprocess.call("/bin/bash -c 'zip -u {}/*.sdk/*.xsa {}/git_log.txt > /dev/null'".format(build_dir, build_dir), shell=True)
 
 def main():
     args = parse_args()
@@ -307,7 +343,10 @@ def main():
         print("Received keyboard interrupt. Terminating")
         exit(1)
     lib_list, build_list = iterate_selections(selections, args.only_projects, args.clean, args.clean_lib, args.dry_run)
-    multi_process_builds(args.num_builds, lib_list, build_list)
+    if args.depends:
+        multi_process_depends(args.num_builds, lib_list)
+    else:
+        multi_process_builds(args.num_builds, lib_list, build_list)
     if args.git_log:
         add_git_log(selections)
 
