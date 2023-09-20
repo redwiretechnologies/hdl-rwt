@@ -12,6 +12,8 @@ git_print () {
     echo "" >> $2
     if [ ! -z "$a" ]
     then
+        echo "  Mods:" >> $2
+        echo "" >> $2
         tmpfile=$(mktemp /tmp/git-script.XXXXXX)
         echo "" >> $tmpfile
         echo "" >> $tmpfile
@@ -20,7 +22,7 @@ git_print () {
         echo "$1 - $c" | sed 's/\///g' >> $tmpfile
         ${VISUAL:-${EDITOR:-vi}} $tmpfile 1>&2
         a=$(head -n -1 $tmpfile)
-        echo "$a" | sed 's/^/    /g' >> $2
+        echo "$a" | sed 's/^/      /g' >> $2
         echo "" >> $2
         rm $tmpfile
     fi
@@ -33,12 +35,15 @@ if [ -f git_log.txt ]; then
 fi
 
 d=$(date)
+n=$(basename "$PWD")
 echo "Build date: $d" > git_log.txt
 echo "" >> git_log.txt
 echo "------------------------------------------------------------------------------------------" >> git_log.txt
 ./scripts/unlink_oot.sh
-git_print $(basename "$PWD") git_log.txt
-builtin cd oot
+git_print $n git_log.txt
+builtin cd ../hdl
+git_print hdl-adi ../$n/git_log.txt
+builtin cd ../$n/oot
 for f in $(ls)
 do
     builtin cd $f
