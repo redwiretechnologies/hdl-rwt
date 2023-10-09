@@ -33,7 +33,7 @@ build/$(1)/$(2)/$(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
 	-rm -rf build/$(1)/$(2)
 	mkdir -p build/$(1)/$(2)
 	cd ../../../.. && ./scripts/git_log_pers.sh $(ROOT_DIR)/build/$(1)/$(2)/git_log.txt "$(PROJECT_NAME)&$(REVISION)&$(1)&$(2)" $(sort $(M_REPOS))
-	cd build/$(1)/$(2) && $(M_VIVADO) ../../../system_project.tcl -tclargs $(ADI_PROJ_DIR) $(1) $(2)\
+	cd build/$(1)/$(2) && $(M_VIVADO) ../../../system_project.tcl -tclargs $(ADI_SRC_TREE) $(1) $(2)\
 		>> build.log 2>&1
 
 proj-$(1)-$(2): build/$(1)/$(2)/$(PROJECT_NAME).xpr
@@ -42,7 +42,7 @@ build/$(1)/$(2)/$(PROJECT_NAME).xpr: $(M_DEPS)
 	-rm -rf build/$(1)/$(2)
 	mkdir -p build/$(1)/$(2)
 	cd ../../../.. && ./scripts/git_log_pers.sh $(ROOT_DIR)/build/$(1)/$(2)/git_log.txt "$(PROJECT_NAME)&$(REVISION)&$(1)&$(2)" $(sort $(M_REPOS))
-	cd build/$(1)/$(2) && $(M_VIVADO) ../../../system_project.tcl -tclargs $(ADI_PROJ_DIR) $(1) $(2) --project-only
+	cd build/$(1)/$(2) && $(M_VIVADO) ../../../system_project.tcl -tclargs $(ADI_SRC_TREE) $(1) $(2) --project-only
 
 clean-$(1)-$(2):
 	-rm -rf build/$(1)/$(2)

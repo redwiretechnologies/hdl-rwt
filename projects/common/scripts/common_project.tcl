@@ -7,7 +7,7 @@ if {$argc < 1} {
 }
 
 set AD_PROJ_DIR [lindex $argv 0]
-source $AD_PROJ_DIR/../scripts/adi_env.tcl
+source $AD_PROJ_DIR/scripts/adi_env.tcl
 
 set my_list [ split $script_dir / ]
 set hdl_rwt [ lsearch -exact $my_list "hdl-rwt" ]
