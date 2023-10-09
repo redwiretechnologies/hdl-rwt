@@ -58,10 +58,10 @@ define LIB_template =
 lib-$(1): $(2)/$(1)/$(4)$(lastword $(subst /, ,$(1))).xpr
 
 $(2)/$(1)/$(4)$(lastword $(subst /, ,$(1))).xpr: $(2)/$(1)/Makefile $(2)/$(1)/*.tcl $(wildcard $(2)/$(1)/src/*.v) $(wildcard $(2)/$(1)/*.v)
-	make -C $(2)/$(1)
+	$(MAKE) -C $(2)/$(1)
 
 clean-lib-$(1):
-	make -C $(2)/$(1) clean
+	$(MAKE) -C $(2)/$(1) clean
 
 
 clean$(3)-libs: clean-lib-$(1)
