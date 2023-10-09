@@ -3,6 +3,8 @@ export ADI_SRC_TREE := $(abspath ../../../../../hdl)
 export ADI_PROJ_DIR := $(ADI_SRC_TREE)/projects
 export ADI_LIB_DIR := $(ADI_SRC_TREE)/library
 
+export ADI_GHDL_DIR := $(abspath ../../../..)
+
 M_VIVADO := vivado -mode batch -source
 
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
