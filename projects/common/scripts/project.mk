@@ -2,7 +2,6 @@ export ADI_SRC_TREE := $(abspath ../../../../../hdl)
 
 export ADI_PROJ_DIR := $(ADI_SRC_TREE)/projects
 export ADI_LIB_DIR := $(ADI_SRC_TREE)/library
-export ADI_IGNORE_VERSION_CHECK := 1
 
 M_VIVADO := vivado -mode batch -source
 
@@ -11,7 +10,7 @@ ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 M_REPOS += hdl-rwt hdl-adi
 
 M_DEPS += $(ADI_PROJ_DIR)/scripts/adi_project_xilinx.tcl
-M_DEPS += $(ADI_PROJ_DIR)/scripts/adi_env.tcl
+M_DEPS += $(ADI_SRC_TREE)/scripts/adi_env.tcl
 M_DEPS += $(ADI_PROJ_DIR)/scripts/adi_board.tcl
 M_DEPS += $(ADI_LIB_DIR)/common/ad_iobuf.v
 M_DEPS += $(ADI_LIB_DIR)/axi_ad9361/axi_ad9361_delay.tcl
