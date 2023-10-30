@@ -48,8 +48,12 @@ for s in xsafiles:
     else:
         merge(completed, d)
 
-print("Completed Builds:")
-print_dict(completed)
-print("")
-print("Failed Builds:")
-print_dict(failed)
+if completed:
+    print("Successful Builds:")
+    print_dict(completed)
+    print("")
+if failed:
+    print("Failed Builds:")
+    print_dict(failed)
+    print("")
+print("Total finished: {}".format(len(xsafiles)))
