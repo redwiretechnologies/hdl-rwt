@@ -5,8 +5,8 @@
 <!-- ##################################################################### -->
 <ip_presets schema="1.0">
   <!--insert ip presets here, see ug895 or other board part files-->
-  <ip_preset preset_proc_name="zynq_ultra_ps_e_preset"> 
-    <ip vendor="xilinx.com" library="ip" name="zynq_ultra_ps_e" version="*"> 
+  <ip_preset preset_proc_name="zynq_ultra_ps_e_preset">
+    <ip vendor="xilinx.com" library="ip" name="zynq_ultra_ps_e" version="*">
       <user_parameters>
         <user_parameter  name="CONFIG.PSU__PRESET_APPLIED" value="1"/>
         <user_parameter  name="CONFIG.PSU_BANK_0_IO_STANDARD" value="LVCMOS18"/>
@@ -22,7 +22,7 @@
         <user_parameter  name="CONFIG.PSU__I2C0__PERIPHERAL__IO" value="MIO 38 .. 39"/>
         <user_parameter  name="CONFIG.PSU__SD0__PERIPHERAL__ENABLE" value="1"/>
         <user_parameter  name="CONFIG.PSU__SD0__SLOT_TYPE" value="eMMC"/>
-        <user_parameter  name="CONFIG.PSU__SD0__PERIPHERAL__IO" value="MIO 13 .. 22"/>
+        <user_parameter  name="CONFIG.PSU__SD0__PERIPHERAL__IO" value="MIO 13 .. 16 21 22"/>
         <user_parameter  name="CONFIG.PSU__SD0__RESET__ENABLE" value="1"/>
         <user_parameter  name="CONFIG.PSU__SD0__GRP_POW__IO" value="MIO 23"/>
         <user_parameter  name="CONFIG.PSU__TTC0__PERIPHERAL__ENABLE" value="1"/>
@@ -67,5 +67,5 @@
       </user_parameters>
     </ip>
   </ip_preset>
-   
+
 </ip_presets>
