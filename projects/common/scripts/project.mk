@@ -3,16 +3,27 @@ export ADI_SRC_TREE := $(abspath ../../../../../hdl)
 export ADI_PROJ_DIR := $(ADI_SRC_TREE)/projects
 export ADI_LIB_DIR := $(ADI_SRC_TREE)/library
 
+export ADI_GHDL_DIR := $(abspath ../../../..)
+
 M_VIVADO := vivado -mode batch -source
 
+ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
+M_REPOS += hdl-rwt hdl-adi
+
 M_DEPS += $(ADI_PROJ_DIR)/scripts/adi_project_xilinx.tcl
-M_DEPS += $(ADI_PROJ_DIR)/scripts/adi_env.tcl
+M_DEPS += $(ADI_SRC_TREE)/scripts/adi_env.tcl
 M_DEPS += $(ADI_PROJ_DIR)/scripts/adi_board.tcl
 M_DEPS += $(ADI_LIB_DIR)/common/ad_iobuf.v
 M_DEPS += $(ADI_LIB_DIR)/axi_ad9361/axi_ad9361_delay.tcl
 
 M_DEPS += $(foreach lib,$(M_ADI_LIBS),$(subst ^^,$(lastword $(subst /, ,$(lib))),$(subst %%,$(lib), $(ADI_LIB_DIR)/%%/^^.xpr)))
 M_DEPS += $(foreach lib,$(M_CUSTOM_LIBS),$(subst ^^,$(lastword $(subst /, ,$(lib))),$(subst %%,$(lib), ../../../../library/%%/build/^^.xpr)))
+
+.PHONY: dependencies
+
+dependencies:
+	@echo $(PROJECT_NAME) -- $(sort $(M_REPOS))
 
 define BOARD_template =
 
@@ -23,7 +34,8 @@ $(1)-$(2): build/$(1)/$(2)/$(PROJECT_NAME).sdk/system_top.xsa
 build/$(1)/$(2)/$(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
 	-rm -rf build/$(1)/$(2)
 	mkdir -p build/$(1)/$(2)
-	cd build/$(1)/$(2) && $(M_VIVADO) ../../../system_project.tcl -tclargs $(ADI_PROJ_DIR) $(1) $(2)\
+	cd ../../../.. && ./scripts/git_log_pers.sh $(ROOT_DIR)/build/$(1)/$(2)/git_log.txt "$(PROJECT_NAME)&$(REVISION)&$(1)&$(2)" $(sort $(M_REPOS))
+	cd build/$(1)/$(2) && $(M_VIVADO) ../../../system_project.tcl -tclargs $(ADI_SRC_TREE) $(1) $(2)\
 		>> build.log 2>&1
 
 proj-$(1)-$(2): build/$(1)/$(2)/$(PROJECT_NAME).xpr
@@ -31,7 +43,8 @@ proj-$(1)-$(2): build/$(1)/$(2)/$(PROJECT_NAME).xpr
 build/$(1)/$(2)/$(PROJECT_NAME).xpr: $(M_DEPS)
 	-rm -rf build/$(1)/$(2)
 	mkdir -p build/$(1)/$(2)
-	cd build/$(1)/$(2) && $(M_VIVADO) ../../../system_project.tcl -tclargs $(ADI_PROJ_DIR) $(1) $(2) --project-only
+	cd ../../../.. && ./scripts/git_log_pers.sh $(ROOT_DIR)/build/$(1)/$(2)/git_log.txt "$(PROJECT_NAME)&$(REVISION)&$(1)&$(2)" $(sort $(M_REPOS))
+	cd build/$(1)/$(2) && $(M_VIVADO) ../../../system_project.tcl -tclargs $(ADI_SRC_TREE) $(1) $(2) --project-only
 
 clean-$(1)-$(2):
 	-rm -rf build/$(1)/$(2)
@@ -47,10 +60,10 @@ define LIB_template =
 lib-$(1): $(2)/$(1)/$(4)$(lastword $(subst /, ,$(1))).xpr
 
 $(2)/$(1)/$(4)$(lastword $(subst /, ,$(1))).xpr: $(2)/$(1)/Makefile $(2)/$(1)/*.tcl $(wildcard $(2)/$(1)/src/*.v) $(wildcard $(2)/$(1)/*.v)
-	make -C $(2)/$(1)
+	$(MAKE) -C $(2)/$(1)
 
 clean-lib-$(1):
-	make -C $(2)/$(1) clean
+	$(MAKE) -C $(2)/$(1) clean
 
 
 clean$(3)-libs: clean-lib-$(1)

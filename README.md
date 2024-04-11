@@ -16,10 +16,10 @@ For issues with this repository, its documentation, or additional questions, ple
 # Requirements
 
 * Linux OS
-* Vivado 2020.2
+* Vivado 2021.2
 * git
 * make
-* Analog Devices [hdl](https://github.com/analogdevicesinc/hdl/tree/1fe0d5f8e00b119a5a389213cf05e9db4646c86a) (Please note that this is the specific commit that builds have been tested against) checked out into the same folder as `hdl-rwt`
+* Analog Devices [hdl](https://github.com/analogdevicesinc/hdl/tree/2021_R2) (Please note that this is the specific commit that builds have been tested against) checked out into the same folder as `hdl-rwt`
 * Python 3.x
 * Python Libraries
     * Subprocess
@@ -45,7 +45,7 @@ For issues with this repository, its documentation, or additional questions, ple
         * gi
         * sys
 * For generating DTS for created projects
-    * [device-tree-xlnx](https://github.com/Xilinx/device-tree-xlnx/tree/xilinx-v2020.2) (Please note that this is the specific required commit for this version of Vivado)
+    * [device-tree-xlnx](https://github.com/Xilinx/device-tree-xlnx/tree/xilinx_v2021.2) (Please note that this is the specific required commit for this version of Vivado)
 
 --- 
 
@@ -194,6 +194,16 @@ This block is a wrapper around the `axi_adc_decimate` block provided by Analog D
 It makes a slight modification to the way registers are provided to the block to make it easier to integrate into our build environment.
 It also includes a bypass signal if a user would prefer to bypass it.
 
+## `data_order`
+
+This block is made to be inserted on the datapath in the FPGA to test for data validity.
+It is controlled by two GPIO lines that allow the user to send either a constant value or the value of a counter (offset per channel).
+This should allow a user to analyze data integrity.
+
+## `line_matrix`
+
+This block allows an arbitrary number of inputs to be mapped to an arbitrary number of outputs.
+
 ## `default_block`
 
 This is the primary part of our BSP.
@@ -245,6 +255,7 @@ optional arguments:
   -n NUM_BUILDS, --num_builds NUM_BUILDS
                         Number of simultaneous make commands to run.
   -g, --git_log         Create a log of the git repos to put into each xsa file
+  --depends             Show dependencies for each project based on the M_REPOS variable 
 
 ```
 
@@ -434,6 +445,10 @@ optional arguments:
                         hierarchy accordingly.
 ```
 
+## `check_builds.py`
+
+This script is designed to look through all of the completed builds and show which ones passed and failed.
+
 ## `move_builds.py`
 
 This script is similar to `export_builds.py`, but instead of copying them all to a single directory, it is made to copy the files into the build directory for our Yocto/OpenEmbedded builds for the operating system. 
@@ -490,6 +505,24 @@ optional arguments:
   -x EXCLUDE, --exclude EXCLUDE
                         A string that must not be contained in the filepath to the image
   -v, --verbose         Print the exported files
+```
+
+## `create_git_log.sh`
+
+This script is designed to traverse `hdl-rwt`, `hdl` from Analog Devices, and any repositories in `oot` to call `git status` and get information about the most recent commit.
+If there are currently modifications to the repository, these will be flagged and the user will be asked to input a commit message.
+The generated file (`git_log.txt`) will be used to provide the information that will be stored on the ROM in the FPGA project to allow a user to check what the build state was
+for a particular image loaded on the target device.
+
+## `git_log_pers.sh`
+
+This script is used by our Makefiles to generate the specific information that should be loaded into the ROM in the FPGA project.
+It will generate the appropriate `*.coe` file to intialize the ROM.
+In general, this script is only called by the Makefile and is rarely manually used.
+
+**USAGE**:    
+```
+Usage: git_log_pers.sh [file to write] [project name] [repo list]
 ```
 
 ## <a name="link-script">`link_oot.sh`</a>
@@ -565,11 +598,15 @@ There are quite a few TCL scripts used to build a given project (we will use the
 	* This looks at the arguments passed to set the FPGA device and board part
 * `projects/common/scripts/common_project_files.tcl`
 	* This adds some of the project files to the appropriate variable
+* `projects/common/scripts/common_bd.tcl`
+    * This sources `*.tcl` files that are meant to be run for every project
+* `projects/common/scripts/create_rom.tcl`
+    * This creates a ROM on the AXI bus that contains information about the state of all repositories used to build the given project.
 * `projects/common/scripts/te0820/common_constraints.tcl`
 	* This adds the necessary constraints file to the project files in the appropriate variable
 * `projects/common/oxygen/rev3/scripts/project_files.tcl`
 	* This will add certain files to every project that uses the board (some conditionally based on set variables). In this case, we see that constraints relevant to the AD9361 component are added based on whether the `axi_ad9361` block is in the project.
-* Vivado Directives (thinks like Synthesis and Implementation strategies) are then sourced in the following order
+* Vivado Directives (things like Synthesis and Implementation strategies) are then sourced in the following order
 	* `projects/common/oxygen/rev3/vivado_directives.tcl`
 		* Vivado directives for all builds for `oxygen/rev3`
 	* `projects/default/scripts/vivado_directives.tcl`
@@ -672,7 +709,7 @@ A component may optionally contain:
 * Simulation sources (contained in a `sim` directory)
 	* These sources can be included in the `sim_files` inside your TCL script and can be used for validating your code. An example of this can be seen in the `default_block` component.
 * IP sources (contained in a `IP` directory)
-	* These will contain the a folder named `<ip_name>` which will contain the file `<ip_name>.xci`
+	* These will contain a folder named `<ip_name>` which will contain the file `<ip_name>.xci`
 
 ### <a name="oot-boards">Boards</a>
 
@@ -777,14 +814,15 @@ The following files are required:
 	include ../../scripts/default_proj.mk
 	```
 * A block diagram script (in this case `system_bd.tcl`)
-	* This file is quite simple. It helps to set up the environment before sourcing the scripts relevant to this personality (`default/scripts/default_bd.tcl`) and relevant to this board (`common/default/oxygen/rev3/oxygen_system_bd.tcl`) and setting any block parameters that are specific to this combination of personality and board. All of these TCL scripts are described [here](#tcl-scripts). Here is the file
+	* This file is quite simple. It helps to set up the environment before sourcing the scripts relevant to this personality (`default/scripts/default_bd.tcl`), to this board (`common/oxygen/rev3/oxygen_system_bd.tcl`), and to all projects (`common/scripts/common_bd.tcl`) and setting any block parameters that are specific to this combination of personality and board. All of these TCL scripts are described [here](#tcl-scripts). Here is the file
 	```
 	set script_dir [file dirname [ file dirname [ file normalize [ info script ]/... ] ] ]
 
 	puts $script_dir
 
-	source $script_dir/../../../common/oxygen/rev3/oxygen_system_bd.tcl
-	source $script_dir/../../scripts/default_bd.tcl
+    source "$script_dir/../../../common/oxygen/rev3/oxygen_system_bd.tcl"
+    source "$script_dir/../../scripts/default_bd.tcl"
+    source "$script_dir/../../../common/scripts/common_bd.tcl" 
 
 	ad_ip_parameter axi_ad9361 CONFIG.ADC_INIT_DELAY 11
 	```

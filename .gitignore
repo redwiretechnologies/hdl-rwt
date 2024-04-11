@@ -81,3 +81,6 @@ __pycache__
 oot/*
 !oot/.keep
 git_log.txt
+git_log.txt.coe
+download.bin
+device-tree-xlnx

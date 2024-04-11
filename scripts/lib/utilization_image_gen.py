@@ -18,7 +18,7 @@ def gen_images(root_copy_dir, fi, verbose, dry_run, selected_properties, headers
                 new_row = [ s.strip() for s in row ]
                 if new_row[0] in selected_properties.keys():
                     if new_row[0] not in data.keys():
-                        del new_row[2]
+                        del new_row[2:4]
                         data.update({selected_properties[new_row[0]]: new_row[1:]})
 
         p = PrettyTable(headers)

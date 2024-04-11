@@ -6,7 +6,7 @@
 <!-- ##################################################################### -->
 <!-- ##general board part description-->
 <!-- ##Info: board part name: board_vendor:board_name:part0:file_version  , use all lower case-->
-<board schema_version="2.1" vendor="trenz.biz" name="te0820_4cg_1e" display_name="TE0820-*-4AE21FA/-4AE21FI/-4CG-1EA (2 GB DDR). *SPRT PCB: REV04, REV03" url="trenz.org/te0820-info" preset_file="preset.xml">
+<board schema_version="2.1" vendor="trenz.biz" name="te0820_4cg_1e" display_name="TE0820-*-4AE21FA/-04CG-1EA (2 GB DDR). *SPRT PCB: REV05, REV04, REV03" url="trenz.org/te0820-info" preset_file="preset.xml">
   <images>
     <image name="te0820_board.png" display_name="TE0820 Board" sub_type="board">
       <description>TE0820 Image</description>
@@ -17,6 +17,7 @@
 <!-- ##Currently revision with highest id is only displayed in Vivado. Write supported revisions to description too!-->
   <compatible_board_revisions>
     <!--insert supported revisions-->
+    <revision id="0">0.5</revision>
     <revision id="0">0.4</revision>
     <revision id="0">0.3</revision>
   </compatible_board_revisions>
@@ -26,7 +27,7 @@
   <file_version>2.0</file_version>
 <!-- ##################################################################### -->
 <!-- ##Board descriptions -->
-  <description>Zynq UltraScale+ MPSoC TE0820-*-4AE21FA/-4AE21FI/-4CG-1EA Board (form factor 4x5 cm) with 2x1GByte DDR4, speed grade -1 and extended temperature range. *Supported PCB Revisions: REV04, REV03.</description>
+  <description>Zynq UltraScale+ MPSoC TE0820-*-4AE21FA/-04CG-1EA Board (form factor 4x5 cm) with 2x1GByte DDR4, speed grade -1 and extended temperature range. *Supported PCB Revisions: REV05, REV04, REV03.</description>
 <!-- ##################################################################### -->
 <!-- ##Board components. Special component part0=fpga -->
 <!-- ##set display_name and correct part_name for fpga-->
