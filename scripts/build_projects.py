@@ -308,7 +308,11 @@ def create_git_log():
     cwd = os.getcwd()
     script_path = os.path.abspath(__file__)
     script_dir = os.path.dirname(script_path)
-    os.system(script_dir + "/create_git_log.sh")
+    if os.path.isfile(script_dir + "/../git_log.txt"):
+        return
+    else:
+        print("Please create git_log.txt before running this script by running ./scripts/create_git_log.sh")
+        exit(1)
 
 # Create the list of builds to be done
 def git_log_iterate_selections(selections):
@@ -335,8 +339,7 @@ def add_git_log(selections):
 def main():
     args = parse_args()
     try:
-        if args.git_log:
-            create_git_log()
+        create_git_log()
         selections = get_all_selections(args.carriers, args.revisions, args.personalities, args.boards, args.som_revisions)
     except KeyboardInterrupt:
         print("")
