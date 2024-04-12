@@ -40,6 +40,7 @@ For issues with this repository, its documentation, or additional questions, ple
         * pandas
         * matplotlib
         * prettytable
+    * wkhtmltopdf
 * To view utilization similar to Vivado's utilization viewer but without requiring launching Vivado
     * Python Libraries
         * gi
