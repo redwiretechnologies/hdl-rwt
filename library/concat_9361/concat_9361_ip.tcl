@@ -18,11 +18,11 @@ adi_ip_files concat_9361 [list \
 
 adi_ip_properties_lite concat_9361
 
-set_property vendor ornl.gov [ipx::current_core]
+set_property vendor redwiretechnologies.us [ipx::current_core]
 set_property library user [ipx::current_core]
-set_property taxonomy /ORNL [ipx::current_core]
-set_property vendor_display_name {ORNL} [ipx::current_core]
-set_property company_url {http://www.ornl.gov} [ipx::current_core]
+set_property taxonomy /RWT [ipx::current_core]
+set_property vendor_display_name {RWT} [ipx::current_core]
+set_property company_url {http://www.redwiretechnologies.us} [ipx::current_core]
 
 ipx::remove_all_bus_interface [ipx::current_core]
 ipx::save_core [ipx::current_core]

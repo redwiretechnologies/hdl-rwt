@@ -73,11 +73,11 @@ add_files -norecurse -scan_for_includes -fileset [get_filesets sim_1] $sim_files
 
 adi_ip_properties default_block
 
-set_property vendor ornl.gov [ipx::current_core]
+set_property vendor redwiretechnologies.us [ipx::current_core]
 set_property library user [ipx::current_core]
-set_property taxonomy /ORNL [ipx::current_core]
-set_property vendor_display_name {ORNL} [ipx::current_core]
-set_property company_url {http://www.ornl.gov} [ipx::current_core]
+set_property taxonomy /RWT [ipx::current_core]
+set_property vendor_display_name {RWT} [ipx::current_core]
+set_property company_url {http://www.redwiretechnologies.us} [ipx::current_core]
 
 adi_add_bus "s_dac_dma" "slave" \
 	"xilinx.com:interface:axis_rtl:1.0" \
