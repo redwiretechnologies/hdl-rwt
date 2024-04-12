@@ -37,6 +37,7 @@ def gen_images(root_copy_dir, fi, verbose, dry_run, selected_properties, headers
         ax.set_title('Resource Utilization')
         ax.set_xlabel('Resource')
         ax.set_ylabel('Utilization (%)')
+        ax.set_xticks(ax.get_xticks())
         ax.set_xticklabels(df.index.values)
         ax.set_ylim([0, 108])
         rects = ax.patches
