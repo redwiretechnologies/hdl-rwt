@@ -433,9 +433,9 @@ optional arguments:
   -d, --dry_run         Don't actually perform the copy
   -n NAME, --name NAME  Force rename of files to a different name
   -l FILTER, --filter FILTER
-                        A string that must be contained in the filepath to the image
+                        A string (or comma-separated list of strings) that must be contained in the filepath to the image
   -x EXCLUDE, --exclude EXCLUDE
-                        A string that must not be contained in the filepath to the image
+                        A string (or comma-separated list of strings) that must not be contained in the filepath to the image 
   -v, --verbose         Print the exported files
   -c, --convert         Convert to download.bin
   -t STYLE, --style STYLE
@@ -468,9 +468,9 @@ optional arguments:
                         Directory of XSA
   -d, --dry_run         Don't actually perform the copy
   -l FILTER, --filter FILTER
-                        A string that must be contained in the filepath to the image
+                        A string (or comma-separated list of strings) that must be contained in the filepath to the image
   -x EXCLUDE, --exclude EXCLUDE
-                        A string that must not be contained in the filepath to the image
+                        A string (or comma-separated list of strings) that must not be contained in the filepath to the image
   -v, --verbose         Print the exported files
   -n, --newest          Use newest SOM rev
   -s PERSONALITY, --personality PERSONALITY
@@ -502,9 +502,9 @@ optional arguments:
                         updated
   -d, --dry_run         Don't actually perform the copy
   -l FILTER, --filter FILTER
-                        A string that must be contained in the filepath to the image
+                        A string (or comma-separated list of strings) that must be contained in the filepath to the image
   -x EXCLUDE, --exclude EXCLUDE
-                        A string that must not be contained in the filepath to the image
+                        A string (or comma-separated list of strings) that must not be contained in the filepath to the image
   -v, --verbose         Print the exported files
 ```
 

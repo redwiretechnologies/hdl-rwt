@@ -32,8 +32,8 @@ def parse_args():
     parser.add_argument("-p", "--path", help="Export path for all of the utilization files")
     parser.add_argument("-s", "--subdir", default='', help="Subdirectory of projects to look in such that a subsection may be updated")
     parser.add_argument("-d", "--dry_run", action="store_true", help="Don't actually perform the copy")
-    parser.add_argument("-l", "--filter", default='', help="A string that must be contained in the filepath to the image")
-    parser.add_argument("-x", "--exclude", default='', help="A string that must not be contained in the filepath to the image")
+    parser.add_argument("-l", "--filter", default='', help="A string (or comma-separated list of strings) that must be contained in the filepath to the image")
+    parser.add_argument("-x", "--exclude", default='', help="A string (or comma-separated list of strings) that must not be contained in the filepath to the image")
     parser.add_argument("-v", "--verbose", action="store_true", help="Print the exported files")
     args = parser.parse_args()
     return args

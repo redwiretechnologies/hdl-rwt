@@ -2,6 +2,8 @@ import os
 
 def find_files(ext, directory, my_filter, exclude, my_type=''):
     all_files = []
+    filt = set(my_filter.split(','))
+    excl = set(exclude.split(','))
     for root, dirs, files in os.walk(directory):
         if my_type == 'd':
             t = dirs
@@ -10,8 +12,18 @@ def find_files(ext, directory, my_filter, exclude, my_type=''):
         for file in t:
             if file.lower().endswith(ext):
                 temp = os.path.join(root, file)
-                if my_filter in temp or my_filter == '':
-                    if exclude not in temp or exclude == '':
+                m = True
+                for f in filt:
+                    if f not in temp:
+                        m=False
+                        break
+                if m or my_filter == '':
+                    ex = False
+                    for e in excl:
+                        if e not in temp:
+                            ex=True
+                            break
+                    if not ex or exclude == '':
                         all_files.append(temp)
     return all_files
 
