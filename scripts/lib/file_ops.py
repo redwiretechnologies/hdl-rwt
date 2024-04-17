@@ -20,7 +20,7 @@ def find_files(ext, directory, my_filter, exclude, my_type=''):
                 if m or my_filter == '':
                     ex = False
                     for e in excl:
-                        if e not in temp:
+                        if e in temp:
                             ex=True
                             break
                     if not ex or exclude == '':
