@@ -55,3 +55,15 @@ set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports gpio_hdr[0]]
 #     is acceptable for your design and board layout, this DRC can be bypassed by
 #     acknowledging the condition and setting the following XDC constraint:
 set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports gpio_hdr[2]]
+
+# The next line corrects the following DRC error:
+#     ERROR: [DRC PDRC-203] BITSLICE0 not available during BISC: The port gpio_rf[2] is
+#     assigned to a PACKAGE_PIN that uses BITSLICE_1 of a Byte that will be using
+#     calibration. The signal connected to gpio_rf[2] will not be available during
+#     calibration and will only be available after RDY asserts. If this condition is not
+#     acceptable for your design and board layout, gpio_rf[2] will have to be moved to
+#     another PACKAGE_PIN that is not undergoing calibration or be moved to a PACKAGE_PIN
+#     location that is not BITSLICE_0 or BITSLICE_6 on that same Byte. If this condition
+#     is acceptable for your design and board layout, this DRC can be bypassed by
+#     acknowledging the condition and setting the following XDC constraint:
+set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports gpio_rf[2]]

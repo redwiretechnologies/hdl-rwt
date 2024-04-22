@@ -1,4 +1,4 @@
-M_ADI_LIBS += axi_ad9361
+M_ADI_LIBS += axi_adrv9001
 M_ADI_LIBS += axi_dmac
 M_ADI_LIBS += xilinx/util_clkdiv
 M_ADI_LIBS += util_pack/util_cpack2

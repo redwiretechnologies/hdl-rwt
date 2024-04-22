@@ -1,7 +1,7 @@
 
 `timescale 1ns/100ps
 
-module concat_9361 (
+module concat_9002 (
   input         adc_enable_i0,
   input         adc_valid_i0,
   input [15:0]  adc_data_i0,

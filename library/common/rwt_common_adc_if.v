@@ -14,7 +14,7 @@ module rwt_common_adc_if (
   output reg [31:0] up_rdata,
   output reg        up_rack,
 
-  // 9361 interface
+  // 9002 interface
   input             adc_rst,
   input             adc_clk,
   input [63:0]      adc_data,
@@ -159,7 +159,7 @@ module rwt_common_adc_if (
     .M_AXIS_REGISTERED(1))
   u_async_fifo_adc (
 
-    // AD9361 side
+    // AD9002 side
     .s_axis_aclk(adc_clk),
     .s_axis_aresetn(adc_rstn),
     .s_axis_ready(adc_ready),

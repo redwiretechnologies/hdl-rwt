@@ -92,19 +92,29 @@ The current utilization numbers for this personality can be found [here](utiliza
 | 24         | Watchdog                      | Out    |
 | 25         | USBC_ID                       | In     |
 | 26-31      | Reserved                      |        |
-| 32-39      | AD9361 CTRL_OUT (gpio_status) | In     |
-| 40-43      | AD9361 CTRL_IN (gpio_ctl)     | Out    |
-| 44         | AD9361 EN AGC                 | Out    |
-| 45         | AD9361 Sync                   | Out    |
-| 46         | AD9361 Resetb                 | Out    |
-| 47-94      | Reserved                      |        | 
+| 32-39      | ADRV9002 DGPIO                | IO     |
+| 40-43      | Reserved                      |        |
+| 44         | ADRV9002 GP_INT               | IO     |
+| 45         | Reserved                      |        |
+| 46         | ADRV9002 Resetn               | IO     |
+| 47         | Reserved                      |        | 
+| 48         | ADRV9002 RX1 Enable           | Out    |
+| 49         | ADRV9002 RX2 Enable           | Out    |
+| 50         | ADRV9002 TX1 Enable           | Out    |
+| 51         | ADRV9002 TX2 Enable           | Out    |
+| 52         | Reserved                      |        |
+| 53         | ADRV9002 Sync                 | Out    |
+| 54         | MSSI Sync                     | Out    |
+| 55         | Reserved                      |        |
+| 56         | TDD Sync                      | Out    |
+| 57-94      | Reserved                      |        |
 
 </center>
 
 
 ## `gr-iio`
 
-The `gr-iio` personality is the equivalent of the FMCOMMS2 project provided by Analog Devices.
+The `gr-iio` personality is the equivalent of the adrv9001 project provided by Analog Devices.
 
 The current utilization numbers for this personality can be found [here](utilization/markdown/personalities/gr-iio.md).
 
@@ -130,14 +140,22 @@ The current utilization numbers for this personality can be found [here](utiliza
 | 24         | Watchdog                      | Out    |
 | 25         | USBC_ID                       | In     |
 | 26-31      | Reserved                      |        |
-| 32-39      | AD9361 CTRL_OUT (gpio_status) | In     |
-| 40-43      | AD9361 CTRL_IN (gpio_ctl)     | Out    |
-| 44         | AD9361 EN AGC                 | Out    |
-| 45         | AD9361 Sync                   | Out    |
-| 46         | AD9361 Resetb                 | Out    |
-| 47         | UP Enable                     | Out    |
-| 48         | UP TXnRX                      | Out    |
-| 49-94      | Reserved                      |        | 
+| 32-39      | ADRV9002 DGPIO                | IO     |
+| 40-43      | Reserved                      |        |
+| 44         | ADRV9002 GP_INT               | IO     |
+| 45         | Reserved                      |        |
+| 46         | ADRV9002 Resetn               | IO     |
+| 47         | Reserved                      |        | 
+| 48         | ADRV9002 RX1 Enable           | Out    |
+| 49         | ADRV9002 RX2 Enable           | Out    |
+| 50         | ADRV9002 TX1 Enable           | Out    |
+| 51         | ADRV9002 TX2 Enable           | Out    |
+| 52         | Reserved                      |        |
+| 53         | ADRV9002 Sync                 | Out    |
+| 54         | MSSI Sync                     | Out    |
+| 55         | Reserved                      |        |
+| 56         | TDD Sync                      | Out    |
+| 57-94      | Reserved                      |        |
 
 </center>
 
@@ -169,14 +187,22 @@ The current utilization numbers for this personality can be found [here](utiliza
 | 24         | Watchdog                      | Out    |
 | 25         | USBC_ID                       | In     |
 | 26-31      | Reserved                      |        |
-| 32-39      | AD9361 CTRL_OUT (gpio_status) | In     |
-| 40-43      | AD9361 CTRL_IN (gpio_ctl)     | Out    |
-| 44         | AD9361 EN AGC                 | Out    |
-| 45         | AD9361 Sync                   | Out    |
-| 46         | AD9361 Resetb                 | Out    |
-| 47         | UP Enable                     | Out    |
-| 48         | UP TXnRX                      | Out    |
-| 49-94      | Reserved                      |        | 
+| 32-39      | ADRV9002 DGPIO                | IO     |
+| 40-43      | Reserved                      |        |
+| 44         | ADRV9002 GP_INT               | IO     |
+| 45         | Reserved                      |        |
+| 46         | ADRV9002 Resetn               | IO     |
+| 47         | Reserved                      |        | 
+| 48         | ADRV9002 RX1 Enable           | Out    |
+| 49         | ADRV9002 RX2 Enable           | Out    |
+| 50         | ADRV9002 TX1 Enable           | Out    |
+| 51         | ADRV9002 TX2 Enable           | Out    |
+| 52         | Reserved                      |        |
+| 53         | ADRV9002 Sync                 | Out    |
+| 54         | MSSI Sync                     | Out    |
+| 55         | Reserved                      |        |
+| 56         | TDD Sync                      | Out    |
+| 57-94      | Reserved                      |        |
 
 </center>
 
@@ -184,9 +210,9 @@ The current utilization numbers for this personality can be found [here](utiliza
 
 # Library Components
 
-## `concat_9361`
+## `concat_9002`
 
-This block concatenates the signals from the `axi_ad9361` block to make them easier to feed into a block.
+This block concatenates the signals from the `axi_adrv9001` block to make them easier to feed into a block.
 It also splices apart the signals that go from the DMA back into the FPGA (for transmission), making these easier to pass back through the processing chain. 
 
 ## `cic_filter`
@@ -208,7 +234,7 @@ This block allows an arbitrary number of inputs to be mapped to an arbitrary num
 ## `default_block`
 
 This is the primary part of our BSP.
-This block takes in data from the `concat_9361` block (as well as external signals) and passes it through an internal processing chain.
+This block takes in data from the `concat_9002` block (as well as external signals) and passes it through an internal processing chain.
 For received data, the data is passed through a `cic_filter` block, buffered in a FIFO, and muxed out along with tags to represent conditions met within the radio (pps, FIFO overflow event, etc.)
 For transmitted data, the data is currently buffered in a FIFO and passed out with no other processing.   
 
@@ -571,15 +597,15 @@ There are 7 Makefiles used to build a given project (we will use the `default` p
 * `projects/default/oxygen/rev3/Makefile`
 	* This is the Makefile that will "inherit" the others. It defines any libraries needed for its specific build, gives the project a name, and includes the Makefiles specific to the carrier board/revision combination and the Makefile specific to the personality.
 * `projects/default/scripts/default.mk`
-	* This Makefile adds any files that need to be included as a part of building the personality as a dependency. It also adds any necessary libraries as dependencies and then includes `common_deps.mk`, `axi_ad9361.mk`, and `project.mk`
+	* This Makefile adds any files that need to be included as a part of building the personality as a dependency. It also adds any necessary libraries as dependencies and then includes `common_deps.mk`, `axi_adrv9002.mk`, and `project.mk`
 * `projects/common/oxygen/rev3/scripts/oxygen.mk`
 	* This files adds any carrier board specific files as dependencies, defines which SOM format is supported, and includes the Makefile for that SOM format
 * `projects/common/scripts/te0820/boards.mk`
 	* This defines each SOM that fits within a given form factor that could be used to build and adds all constraints for these specific SOMs as dependencies.
 * `projects/common/scripts/common_deps.mk`
 	* This file simply adds some common dependencies to the list of dependencies so they all don't have to be typed every time
-* `projects/common/scripts/axi_ad9361.mk`
-	* This file adds all the necessary components to use the `axi_ad9361` IP block in a user's design as dependencies. 
+* `projects/common/scripts/axi_adrv9002.mk`
+	* This file adds all the necessary components to use the `axi_adrv9001` IP block in a user's design as dependencies. 
 * `projects/common/scripts/project.mk`
 	* This Makefile uses all of the dependencies, libraries, and variables defined in the other Makefiles to actually define the buildable targets
 
@@ -644,34 +670,34 @@ The [linking](#link-script)/[unlinking](#unlink-script) methodology is described
 ### <a name="oot-library">Library Components</a>
 
 Library components are perhaps the simplest parts to add to the build system.
-We will look at the `concat_9361` component as an example.
+We will look at the `concat_9002` component as an example.
 Let's look at the directory structure.
 
 ```
-$ ls -R concat_9361/
-concat_9361/:
-concat_9361_constr.xdc  concat_9361_ip.tcl  Makefile  src/
+$ ls -R concat_9002/
+concat_9002/:
+concat_9002.xdc  concat_9002.tcl  Makefile  src/
 
-concat_9361/src:
-concat_9361.v
+concat_9002/src:
+concat_9002.v
 ```
 
 A component generically must contain:
-* A constraints file (in this case `concat_9361_constr.xdc`)
+* A constraints file (in this case `concat_9002_constr.xdc`)
 	* This file contains any specific constraints that must be applied for the component. This component has none, so the file is empty
 * A Makefile
 	* This is discussed [above](#makefiles), but it essentially marks your sources as dependencies, sets the component name, and calls a master Makefile for library components. Here is the example for this component
 	```
-	LIB_NAME = concat_9361
+	LIB_NAME = concat_9002
 
 	M_DEPS = \
-	  src/concat_9361.v \
-	  concat_9361_constr.xdc \
-	  concat_9361_ip.tcl
+	  src/concat_9002.v \
+	  concat_9002_constr.xdc \
+	  concat_9002_ip.tcl
 
 	include ../scripts/library.mk
 	```
-* A TCL script for generating your component (in this case `concat_9361_ip.tcl`)
+* A TCL script for generating your component (in this case `concat_9002_ip.tcl`)
 	* This will set up some generic environment stuff and then create the component as an IP block. It is recommended to copy this from an existing component and change the relevant parts. Here is the example for this component
 	```
 	# ip
@@ -687,12 +713,12 @@ A component generically must contain:
 	source $AD_LIB_DIR/scripts/adi_env.tcl
 	source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
 
-	adi_ip_create concat_9361
-	adi_ip_files concat_9361 [list \
-	  "$script_dir/src/concat_9361.v" \
-	  "$script_dir/concat_9361_constr.xdc" ]
+	adi_ip_create concat_9002
+	adi_ip_files concat_9002 [list \
+	  "$script_dir/src/concat_9002.v" \
+	  "$script_dir/concat_9002_constr.xdc" ]
 
-	adi_ip_properties_lite concat_9361
+	adi_ip_properties_lite concat_9002
 
 	set_property vendor redwiretechnologies.us [ipx::current_core]
 	set_property library user [ipx::current_core]
@@ -768,17 +794,17 @@ A board must contain:
 	set supported_boards "te0820"
 	```	
 * A project files script (in this case `scripts/project_files.tcl`)
-	* This will add certain files to every project that uses the board (some conditionally based on set variables). In this case, we see that constraints relevant to the AD9361 component are added based on whether the `axi_ad9361` block is in the project. We do this because that IP block is not included as a part of the `blank` project. If a user never desired to build the `blank` project, this would not be necessary. Here is the file
+	* This will add certain files to every project that uses the board (some conditionally based on set variables). In this case, we see that constraints relevant to the ADRV9001 component are added based on whether the `axi_adrv9001` block is in the project. We do this because that IP block is not included as a part of the `blank` project. If a user never desired to build the `blank` project, this would not be necessary. Here is the file
 	```
 	lappend project_files \
 	  "$script_dir/../../../common/oxygen/rev3/oxygen_system_constr.xdc"
 
-	if {[info exists NO_ADI9361] != 0} {
+	if {[info exists NO_ADRV9002] != 0} {
 		lappend project_files \
-		  "$script_dir/../../../common/shared/$supported_boards/fake_ad9361_constr.xdc"
+		  "$script_dir/../../../common/shared/$supported_boards/fake_adrv9002_constr.xdc"
 	} else {
 		lappend project_files \
-		  "$script_dir/../../../common/shared/$supported_boards/ad9361_constr.xdc"
+		  "$script_dir/../../../common/shared/$supported_boards/adrv9002_constr.xdc"
 	}
 	```
 * A makefile (in this case `scripts/oxygen.mk`)
@@ -866,14 +892,14 @@ For a personality, the following files are required
 * A Makefile (in this case `default_proj.mk`)
 	* This is described [here](#makefiles). Here is the file
 	```
-	M_CUSTOM_LIBS += concat_9361
+	M_CUSTOM_LIBS += concat_9002
 	M_CUSTOM_LIBS += default_block
 	M_CUSTOM_LIBS += cic_filter
 
 	M_DEPS += ../../scripts/default_bd.tcl
 
 	include ../../../common/scripts/common_deps.mk
-	include ../../../common/scripts/axi_ad9361.mk
+	include ../../../common/scripts/axi_adrv9002.mk
 	include ../../../common/scripts/project.mk
 	```
 

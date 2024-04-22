@@ -7,38 +7,95 @@
 //    24    : Watchdog (Out)
 //    25    : USBC ID (In)
 //    26-31 : Reserved
-//    32-39 : AD9361 CTRL_OUT (gpio_status) (In)
-//    40-43 : AD9361 CTRL_IN (gpio_ctl) (Out)
-//    44    : AD9361 EN AGC (Out)
-//    45    : AD9361 Sync (Out)
-//    46    : AD9361 Resetb (Out)
-//    47-94 : Reserved
+//    32-39 : ADRV9002 DGPIO (IO)
+//    40-43 : Reserved
+//    44    : ADRV9002 GP_INT (IO)
+//    45    : Reserved
+//    46    : ADRV9002 Resetn (IO)
+//    47    : Reserved
+//    48    : ADRV9002 RX1 Enable (Out)
+//    49    : ADRV9002 RX2 Enable (Out)
+//    50    : ADRV9002 TX1 Enable (Out)
+//    51    : ADRV9002 TX2 Enable (Out)
+//    52    : Reserved
+//    53    : ADRV9002 Sync (Out)
+//    54    : MSSI Sync (Out)
+//    55    : Reserved
+//    56    : TDD Sync (Out)
+//    57-94 : Reserved
 
 `timescale 1ns/100ps
 
 module system_top (
+  // Device clock passed through 9001
+  input         dev_clk_in,
 
-  input         rx_clk_in_p,
-  input         rx_clk_in_n,
-  input         rx_frame_in_p,
-  input         rx_frame_in_n,
-  input [ 5:0]  rx_data_in_p,
-  input [ 5:0]  rx_data_in_n,
-  output        tx_clk_out_p,
-  output        tx_clk_out_n,
-  output        tx_frame_out_p,
-  output        tx_frame_out_n,
-  output [ 5:0] tx_data_out_p,
-  output [ 5:0] tx_data_out_n,
+  // Device clock
+  //input       fpga_ref_clk_n,
+  //input       fpga_ref_clk_p,
 
-  output        enable,
-  output        txnrx,
+  // MCS
+  //input       fpga_mcs_in_n,
+  //input       fpga_mcs_in_p,
+  //output      dev_mcs_fpga_out_n,
+  //output      dev_mcs_fpga_out_p,
 
-  output        gpio_resetb,
+  inout [7:0]   dgpio,
+
+  inout         gp_int,
+  inout         ioexp_intn,
+  inout         reset_trx,
+
+  input         rx1_dclk_in_n,
+  input         rx1_dclk_in_p,
+  output        rx1_enable,
+  input         rx1_idata_in_n,
+  input         rx1_idata_in_p,
+  input         rx1_qdata_in_n,
+  input         rx1_qdata_in_p,
+  input         rx1_strobe_in_n,
+  input         rx1_strobe_in_p,
+
+  input         rx2_dclk_in_n,
+  input         rx2_dclk_in_p,
+  output        rx2_enable,
+  input         rx2_idata_in_n,
+  input         rx2_idata_in_p,
+  input         rx2_qdata_in_n,
+  input         rx2_qdata_in_p,
+  input         rx2_strobe_in_n,
+  input         rx2_strobe_in_p,
+
+  output        tx1_dclk_out_n,
+  output        tx1_dclk_out_p,
+  //input         tx1_dclk_in_n,
+  //input         tx1_dclk_in_p,
+  output        tx1_enable,
+  output        tx1_idata_out_n,
+  output        tx1_idata_out_p,
+  output        tx1_qdata_out_n,
+  output        tx1_qdata_out_p,
+  output        tx1_strobe_out_n,
+  output        tx1_strobe_out_p,
+
+  output        tx2_dclk_out_n,
+  output        tx2_dclk_out_p,
+  //input         tx2_dclk_in_n,
+  //input         tx2_dclk_in_p,
+  output        tx2_enable,
+  output        tx2_idata_out_n,
+  output        tx2_idata_out_p,
+  output        tx2_qdata_out_n,
+  output        tx2_qdata_out_p,
+  output        tx2_strobe_out_n,
+  output        tx2_strobe_out_p,
+
+  //inout         tdd_sync,
+
+  inout         enable,
+
+  inout         gpio_resetn,
   output        gpio_sync,
-  output        gpio_en_agc,
-  output [ 3:0] gpio_ctl,
-  input [ 7:0]  gpio_status,
 
   output        spi_csn,
   output        spi_clk,
@@ -63,35 +120,28 @@ module system_top (
   wire [94:0] gpio_o;
   wire [94:0] gpio_t;
 
-  assign tx_clk_out_p = 1'b0;
-  assign tx_clk_out_n = 1'b0;
-  assign tx_frame_out_p = 1'b0;
-  assign tx_frame_out_n = 1'b0;
-  assign tx_data_out_p = 6'b000000;
-  assign tx_data_out_n = 6'b000000;
-  assign enable = 1'b0;
-  assign txnrx = 1'b0;
+  reg  [2:0]  mcs_sync_m = 'd0;
+  reg         sync;
+  wire tdd_sync_loc;
+  wire tdd_sync_i;
+  wire tdd_sync_cntr;
 
-  // Reserved
-  assign gpio_i[94:49] = gpio_o[94:49];
-  assign gpio_i[31:26] = gpio_o[31:26];
-  assign gpio_i[15:13] = gpio_o[15:13];
+  // multi-chip synchronization
+  // CLK is supposed to be FPGA refclk
+  always @(posedge dev_clk_in) begin
+    mcs_sync_m <= {mcs_sync_m[1:0], gpio_o[53]};
+    sync <= mcs_sync_m[2] & ~mcs_sync_m[1];
+  end
 
-  // AD9361 GPIO [48:32]
-  assign gpio_resetb = gpio_o[46:46];
-  assign gpio_sync = gpio_o[45:45];
-  assign gpio_en_agc = gpio_o[44:44];
-  assign gpio_ctl = gpio_o[43:40];
+  assign gpio_sync = sync;
 
-  assign gpio_i[48:40] = gpio_o[48:40];
-  assign gpio_i[39:32] = gpio_status;
+  // tdd_sync_loc - local sync signal from a GPIO or other source
+  // tdd_sync - external sync
+  // Modified because we don't have an assigned TDD Sync pin externally
 
-  // Misc Signals
-  assign gpio_i[22] = pb_int;
-  assign gpio_i[23] = pb_rst_pwr;
-  assign gpio_i[24] = gpio_o[24];
-  assign wd = gpio_t[24] ? 1'bz : gpio_o[24];
-  assign gpio_i[25] = usbc_id;
+  //assign tdd_sync_i = tdd_sync_cntr ? tdd_sync_loc : tdd_sync;
+  //assign tdd_sync = tdd_sync_cntr ? tdd_sync_loc : 1'bz;
+  assign tdd_sync_i = tdd_sync_loc;
 
   generate for (i = 0; i < 12; i = i + 1)
     begin
@@ -107,31 +157,70 @@ module system_top (
     end
   endgenerate
 
-  system_wrapper i_system_wrapper (
-       .emio_uart1_rxd(emio_uart1_rxd),
-       .emio_uart1_txd(emio_uart1_txd),
-       .gpio_i (gpio_i),
-       .gpio_o (gpio_o),
-       .gpio_t(gpio_t),
-       .ps_intr_00 (1'b0),
-       .ps_intr_01 (1'b0),
-       .ps_intr_02 (1'b0),
-       .ps_intr_03 (1'b0),
-       .ps_intr_04 (1'b0),
-       .ps_intr_05 (1'b0),
-       .ps_intr_06 (1'b0),
-       .ps_intr_07 (1'b0),
-       .ps_intr_08 (1'b0),
-       .ps_intr_09 (1'b0),
-       .ps_intr_10 (1'b0),
-       .ps_intr_11 (1'b0),
-       .ps_intr_14 (1'b0),
-       .ps_intr_15 (1'b0),
-       .spi0_csn (spi_csn),
-       .spi0_miso (spi_miso),
-       .spi0_mosi (spi_mosi),
-       .spi0_sclk (spi_clk));
+  generate for (i = 0; i < 8; i = i + 1)
+    begin
+      assign dgpio[i] = gpio_t[i + 32] ? 1'bz : gpio_o[i + 32];
+      assign gpio_i[i + 32] = dgpio[i];
+    end
+  endgenerate
 
+  // Reserved
+  assign gpio_i[94:47] = gpio_o[94:47];
+  assign gpio_i[45]    = gpio_o[45];
+  assign gpio_i[43:40] = gpio_o[43:40];
+  assign gpio_i[31:26] = gpio_o[31:26];
+  assign gpio_i[15:13] = gpio_o[15:13];
+
+  // Misc Signals
+  assign gpio_i[22] = pb_int;
+  assign gpio_i[23] = pb_rst_pwr;
+  assign gpio_i[24] = gpio_o[24];
+  assign wd = gpio_t[24] ? 1'bz : gpio_o[24];
+  assign gpio_i[25] = usbc_id;
+
+  assign gp_int      = gpio_t[44] ? 1'bz : gpio_o[44];
+  assign gpio_i[44]  = gp_int;
+  assign gpio_resetn = gpio_t[46] ? 1'bz : gpio_o[46];
+  assign gpio_i[46]  = gpio_resetn;
+
+  // multi-ssi synchronization
+  assign mssi_sync = gpio_o[54];
+
+  // Enables
+  assign gpio_rx1_enable_in = gpio_o[48];
+  assign gpio_rx2_enable_in = gpio_o[49];
+  assign gpio_tx1_enable_in = gpio_o[50];
+  assign gpio_tx2_enable_in = gpio_o[51];
+
+  // TDD Sync
+  assign tdd_sync_loc = gpio_o[56];
+
+  system_wrapper i_system_wrapper (
+
+    .ps_intr_00 (1'b0),
+    .ps_intr_01 (1'b0),
+    .ps_intr_02 (1'b0),
+    .ps_intr_03 (1'b0),
+    .ps_intr_04 (1'b0),
+    .ps_intr_05 (1'b0),
+    .ps_intr_06 (1'b0),
+    .ps_intr_07 (1'b0),
+    .ps_intr_08 (1'b0),
+    .ps_intr_11 (1'b0),
+    .ps_intr_14 (1'b0),
+    .ps_intr_15 (1'b0),
+
+    .gpio_i (gpio_i),
+    .gpio_o (gpio_o),
+    .gpio_t (gpio_t),
+    .spi0_csn (spi_csn),
+    .spi0_miso (spi_miso),
+    .spi0_mosi (spi_mosi),
+    .spi0_sclk (spi_clk),
+
+    .emio_uart1_rxd(emio_uart1_rxd),
+    .emio_uart1_txd(emio_uart1_txd)
+  );
 endmodule
 
 // ***************************************************************************

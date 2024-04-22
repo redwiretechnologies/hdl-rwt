@@ -80,7 +80,4 @@ if { [file exists $file_name] == 1} {
 if { $no_project_run != 1 } {
     adi_project_run $project_name;
     source "$script_dir/../../../common/scripts/utilization.tcl"
-    if {[info exists NO_ADI9361] == 0} {
-        source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
-    }
 }

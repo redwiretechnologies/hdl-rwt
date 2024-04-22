@@ -42,7 +42,7 @@ module rwt_common_dac_if (
   output            s_user_empty,
   output [9:0]      s_user_room,
 
-  // 9361 interface
+  // 9002 interface
   input             dac_rst,
   input             dac_clk,
   output reg [63:0] dac_data,
@@ -227,7 +227,7 @@ module rwt_common_dac_if (
     .s_axis_full(),
     .m_axis_empty(s_user_empty),
 
-    // 9361 Side
+    // 9002 Side
     .m_axis_aclk(dac_clk),
     .m_axis_aresetn(dac_rstn),
     .m_axis_ready(m_dac_ready),

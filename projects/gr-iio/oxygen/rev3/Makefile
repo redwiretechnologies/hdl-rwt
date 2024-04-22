@@ -5,5 +5,7 @@ M_ADI_LIBS :=
 M_REPOS :=
 M_DEPS :=
 
+export ADI_USE_OOC_SYNTHESIS := n
+
 include ../../../common/oxygen/$(REVISION)/scripts/oxygen.mk
 include ../../scripts/griio_proj.mk
