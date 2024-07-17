@@ -107,6 +107,8 @@ set_property -dict [list \
 set_property -dict [list \
   CONFIG.PSU__SD0__PERIPHERAL__ENABLE {1} \
   CONFIG.PSU__SD0__SLOT_TYPE {eMMC} \
+  CONFIG.PSU__SD0__DATA_TRANSFER_MODE {8Bit} \
+  CONFIG.PSU__SD0__PERIPHERAL__IO {MIO 13 .. 22} \
   CONFIG.PSU__SD0__RESET__ENABLE {1} \
 ] [get_bd_cells sys_ps8]
 
