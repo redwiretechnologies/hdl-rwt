@@ -240,9 +240,10 @@ In this way, the user can more easily keep track of the state of repositories at
 
 **USAGE**:    
 ```
-usage: build_projects.py [-h] [-c] [-r] [-p] [-b] [-s] [-o] [--clean] [--clean_lib] [-d] [-n NUM_BUILDS] [-g]
+usage: build_projects.py [-h] [-c] [-r] [-p] [-b] [-s] [-o] [--clean] [--clean_lib] [-d] [-n NUM_BUILDS] [-g] [--depends] [--new_rev] [--new_srev]
+                         [--c_filt C_FILT] [--r_filt R_FILT] [--p_filt P_FILT] [--b_filt B_FILT] [--sr_filt SR_FILT]
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -c, --carriers        Automatically select all carriers
   -r, --revisions       Automatically select all revisions
@@ -251,12 +252,19 @@ optional arguments:
   -s, --som_revisions   Automatically select all som_revisions
   -o, --only_projects   Only create projects
   --clean               Clean instead of creating projects
-  --clean_lib           Clean libraries instead of creating projects 
+  --clean_lib           Clean libraries instead of creating projects
   -d, --dry_run         Don't actually run any commands. Just print them
   -n NUM_BUILDS, --num_builds NUM_BUILDS
                         Number of simultaneous make commands to run.
   -g, --git_log         Create a log of the git repos to put into each xsa file
-  --depends             Show dependencies for each project based on the M_REPOS variable 
+  --depends             Show dependencies for each project based on the M_REPOS variable
+  --new_rev             Use the newest revision of a carrier board only
+  --new_srev            Use the newest revision of a SOM only
+  --c_filt C_FILT       Match carrier boards that contain this string. Can be passed multiple times
+  --r_filt R_FILT       Match revisions for carrier boards that contain this string. Can be passed multiple times
+  --p_filt P_FILT       Match personalities that contain this string. Can be passed multiple times
+  --b_filt B_FILT       Match SOMs that contain this string. Can be passed multiple times
+  --sr_filt SR_FILT     Match SOM revisions that contain this string. Can be passed multiple times
 
 ```
 

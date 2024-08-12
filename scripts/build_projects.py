@@ -6,11 +6,21 @@ import multiprocessing
 from builds.supported_builds import *
 
 # Get a selection from a list
-def get_item_selection(selection_list, item_name, extra_text="", select_all = False):
+def get_item_selection(selection_list, item_name, extra_text="", select_all = False, select_newest=False, filter_list=None):
     selecting = True
     valid_selections = [i for i in range(0, len(selection_list)+1)]
     if int(len(selection_list)) == 1:
         s = [1]
+    elif select_newest:
+        s = [len(selection_list)-1]
+    elif filter_list:
+        s = []
+        for f in filter_list:
+            for index, n in enumerate(selection_list):
+                if f in n:
+                    s.append(index)
+        t = set(s)
+        s = list(t)
     else:
         while selecting and not select_all:
             print("Select {}(s){}".format(item_name, extra_text))
@@ -38,9 +48,9 @@ def get_item_selection(selection_list, item_name, extra_text="", select_all = Fa
                 selected.append(selection_list[a])
     return selected
 
-def get_all_selections(all_carriers=False, all_revisions=False, all_personalities=False, all_boards=False, all_som_revisions=False):
-    sc = get_item_selection([key for key in supported_builds.keys()], "Carrier", "", all_carriers)
-    if not all_carriers:
+def get_all_selections(all_carriers=False, all_revisions=False, all_personalities=False, all_boards=False, all_som_revisions=False, new_rev=False, new_srev=False, c_filt=[], r_filt=[], p_filt=[], b_filt=[], sr_filt=[]):
+    sc = get_item_selection([key for key in supported_builds.keys()], "Carrier", "", all_carriers, False, c_filt)
+    if not all_carriers and not c_filt:
         print("")
 
     all_selections = {}
@@ -48,8 +58,8 @@ def get_all_selections(all_carriers=False, all_revisions=False, all_personalitie
     for car in sc:
         selections = {}
         revisions = supported_builds[car]["revisions"]
-        revs = get_item_selection(revisions, "Revision", " for Carrier {}".format(car), all_revisions)
-        if not all_revisions:
+        revs = get_item_selection(revisions, "Revision", " for Carrier {}".format(car), all_revisions, new_rev, r_filt)
+        if not all_revisions and not r_filt and not new_rev:
             print("")
         for rev in revs:
             deeper_selections = {}
@@ -66,8 +76,8 @@ def get_all_selections(all_carriers=False, all_revisions=False, all_personalitie
                 personalities = supported_builds[car]["images"]
                 boards = supported_builds[car]["boards"]
                 som_revisions = supported_builds[car]["som_rev"]
-            persons = get_item_selection(personalities, "Personality", " for Revision {} of Carrier {}".format(rev, car), all_personalities)
-            if not all_personalities:
+            persons = get_item_selection(personalities, "Personality", " for Revision {} of Carrier {}".format(rev, car), all_personalities, False, p_filt)
+            if not all_personalities and not p_filt:
                 print("")
             for person in persons:
                 deepest_selections = {}
@@ -81,12 +91,12 @@ def get_all_selections(all_carriers=False, all_revisions=False, all_personalitie
                 else:
                     boards = supported_builds[car]["boards"]
                     som_revisions = supported_builds[car]["som_rev"]
-                bs = get_item_selection(boards, "Board", " for Personality {} on Revision {} of Carrier {}".format(person, rev, car), all_boards)
-                if not all_boards:
+                bs = get_item_selection(boards, "Board", " for Personality {} on Revision {} of Carrier {}".format(person, rev, car), all_boards, False, b_filt)
+                if not all_boards and not b_filt:
                     print("")
                 for b in bs:
-                    srevs = get_item_selection(som_revisions[b], "SOM Revision", " for Board {} for Personality {} on Revision {} of Carrier {}".format(b, person, rev, car), all_som_revisions)
-                    if not all_som_revisions:
+                    srevs = get_item_selection(som_revisions[b], "SOM Revision", " for Board {} for Personality {} on Revision {} of Carrier {}".format(b, person, rev, car), all_som_revisions, new_srev, sr_filt)
+                    if not all_som_revisions and not sr_filt and not new_srev:
                         print("")
                     deepest_selections[b] = srevs
                 deeper_selections[person] = deepest_selections
@@ -301,6 +311,13 @@ def parse_args():
     parser.add_argument("-n", "--num_builds", type=int, default=1, help="Number of simultaneous make commands to run.")
     parser.add_argument("-g", "--git_log", help="Create a log of the git repos to put into each xsa file", action="store_true")
     parser.add_argument("--depends", help="Show dependencies for each project based on the M_REPOS variable", action="store_true")
+    parser.add_argument("--new_rev", action="store_true", help="Use the newest revision of a carrier board only")
+    parser.add_argument("--new_srev", action="store_true", help="Use the newest revision of a SOM only")
+    parser.add_argument("--c_filt", action="append", help="Match carrier boards that contain this string. Can be passed multiple times")
+    parser.add_argument("--r_filt", action="append", help="Match revisions for carrier boards that contain this string. Can be passed multiple times")
+    parser.add_argument("--p_filt", action="append", help="Match personalities that contain this string. Can be passed multiple times")
+    parser.add_argument("--b_filt", action="append", help="Match SOMs that contain this string. Can be passed multiple times")
+    parser.add_argument("--sr_filt", action="append", help="Match SOM revisions that contain this string. Can be passed multiple times")
     args = parser.parse_args()
     return args
 
@@ -340,7 +357,7 @@ def main():
     args = parse_args()
     try:
         create_git_log()
-        selections = get_all_selections(args.carriers, args.revisions, args.personalities, args.boards, args.som_revisions)
+        selections = get_all_selections(args.carriers, args.revisions, args.personalities, args.boards, args.som_revisions, args.new_rev, args.new_srev, args.c_filt, args.r_filt, args.p_filt, args.b_filt, args.sr_filt)
     except KeyboardInterrupt:
         print("")
         print("Received keyboard interrupt. Terminating")
