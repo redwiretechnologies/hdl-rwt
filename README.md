@@ -19,7 +19,7 @@ For issues with this repository, its documentation, or additional questions, ple
 * Vivado 2023.2
 * git
 * make
-* Analog Devices [hdl](https://github.com/analogdevicesinc/hdl/tree/2021_R2) (Please note that this is the specific commit that builds have been tested against) checked out into the same folder as `hdl-rwt`
+* Analog Devices [hdl](https://github.com/analogdevicesinc/hdl/tree/03043f732a3a5ecaba6f4ee9c6e78fcc920f8de6) (Please note that this is the specific commit that builds have been tested against) checked out into the same folder as `hdl-rwt`
 * Python 3.x
 * Python Libraries
     * Subprocess
