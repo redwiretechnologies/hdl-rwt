@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 module sample_clk #(
   parameter CLK_FREQ = 100000000,
   parameter SAMPLE_CLK_WIDTH = 64,

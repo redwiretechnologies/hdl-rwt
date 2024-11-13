@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 // Tagged type format:
 //   For the defaults (DWIDTH=64, TYPE_WIDTH=7), the format is:
 //

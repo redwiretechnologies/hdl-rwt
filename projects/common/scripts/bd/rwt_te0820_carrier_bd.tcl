@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 # default ports
 
 create_bd_port -dir I emio_uart1_rxd

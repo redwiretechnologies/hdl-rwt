@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# SPDX-License-Identifier: Apache-2.0
+
 if [ "$#" -ne 1 ]; then
     echo "Missing XSA file"
     echo "usage: create_download_bin.sh <xsa>"

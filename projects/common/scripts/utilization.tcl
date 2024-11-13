@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 file mkdir $project_name.utilization
 open_run impl_1
 set reportLines [split [report_utilization -return_string] "\n"]

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 //untested
 
 module axi_pipeline_add #(

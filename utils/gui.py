@@ -1,3 +1,5 @@
+#j SPDX-License-Identifier: Apache-2.0
+
 import sys
 import gi
 gi.require_version('Gtk', '3.0')

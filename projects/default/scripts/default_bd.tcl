@@ -1,4 +1,4 @@
-
+# SPDX-License-Identifier: Apache-2.0
 
 create_bd_port -dir I rx_clk_in_p
 create_bd_port -dir I rx_clk_in_n

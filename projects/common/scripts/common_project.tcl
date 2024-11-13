@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 source "$script_dir/../../../common/scripts/common_functions.tcl"
 set no_project_run 0
 

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 // Tags are 7-bits wide.
 localparam RWT_TAG_TIME = 7'd01;
 localparam RWT_TAG_PPS = 7'd02;

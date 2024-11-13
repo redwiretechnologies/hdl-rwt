@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# SPDX-License-Identifier: Apache-2.0
+
 subdircount=$(find "$PWD/oot" -maxdepth 1 -type d | wc -l)
 files=$(find "$PWD/oot" -maxdepth 2 -mindepth 2 -type d | grep -Ev utilization | grep -Ev ".git")
 

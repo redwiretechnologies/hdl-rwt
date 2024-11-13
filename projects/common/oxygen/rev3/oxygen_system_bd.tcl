@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 source $script_dir/../../../common/scripts/bd/rwt_te0820_carrier_bd.tcl
 
 set_property -dict [list \

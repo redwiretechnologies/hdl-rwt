@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 # ad9361 constraints
 
 # Polarity matches zcu102 board.The LVDS data pairs are inverted by default.

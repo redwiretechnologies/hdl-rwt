@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 module rwt_tag_insert_escape #(
   parameter DWIDTH = 64)
 (

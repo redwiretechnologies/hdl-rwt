@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 ad_ip_instance blk_mem_gen rom
 
 set_property -dict [list \

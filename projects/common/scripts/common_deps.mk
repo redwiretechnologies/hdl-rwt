@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 M_DEPS := system_top.v
 M_DEPS += system_project.tcl
 M_DEPS += system_bd.tcl

@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 import numpy as np
 data = np.fromfile('raw_iq.capture', dtype=np.float32)
 data = data * 2048

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 //  EMIO GPIO Settings:
 //    0-11  : GPIO Header (IO)
 //    12-15 : Reserved

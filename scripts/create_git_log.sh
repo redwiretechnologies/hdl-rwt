@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# SPDX-License-Identifier: Apache-2.0
+
 git_print () {
     git fetch > /dev/null
     a=$(git status --porcelain)
