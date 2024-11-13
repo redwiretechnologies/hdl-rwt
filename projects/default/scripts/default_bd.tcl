@@ -49,6 +49,9 @@ ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.CACHE_COHERENT 1
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_AXCACHE 0b1111
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_AXPROT 0b010
 
 ad_ip_instance axi_dmac axi_ad9361_dac_dma
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_SRC 0
@@ -59,6 +62,9 @@ ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.CACHE_COHERENT 1
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_AXCACHE 0b1111
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_AXPROT 0b010
 
 # ad9361 -> Outside world
 
@@ -174,10 +180,9 @@ ad_cpu_interconnect 0x7C400000 axi_ad9361_adc_dma
 ad_cpu_interconnect 0x7C420000 axi_ad9361_dac_dma
 ad_cpu_interconnect 0x7D000000 default_block
 
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
-ad_mem_hp2_interconnect sys_cpu_clk sys_ps7/S_AXI_HP2
-ad_mem_hp2_interconnect sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
+ad_mem_hpc0_interconnect sys_cpu_clk sys_ps7/S_AXI_HPC0
+ad_mem_hpc0_interconnect sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
+ad_mem_hpc0_interconnect sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
 
 # interrupts
 
