@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 class vivado_rpt_parser():
     def __init__(self, fn):
         self.read_lines(fn)
