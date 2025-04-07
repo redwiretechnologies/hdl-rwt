@@ -1,4 +1,4 @@
-
+// SPDX-License-Identifier: Apache-2.0
 
 module axis_terminate_on_reset #(
   parameter UWIDTH = 1,

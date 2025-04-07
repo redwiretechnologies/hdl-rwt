@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# SPDX-License-Identifier: Apache-2.0
+
 files=$(find oot/ -name .git -type d -prune -o -name utilization -type d -prune -o -type f -print)
 other_files=$(find . -xdev \( -path ./oot -o -name build -type d -o -name .git -type d -o -name *pycache* -type d -o -name utilization -type d \) -prune -o -type f -print)
 

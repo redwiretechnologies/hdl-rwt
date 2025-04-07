@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 M_ADI_LIBS += axi_adrv9001
 M_ADI_LIBS += axi_dmac
 M_ADI_LIBS += xilinx/util_clkdiv

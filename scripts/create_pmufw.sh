@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# SPDX-License-Identifier: Apache-2.0
+
 if [[ $# -lt 2 ]]; then
     echo "Usage: create_pmufw.sh [path to xsa] [name of zipped pmufw]"
     exit 1

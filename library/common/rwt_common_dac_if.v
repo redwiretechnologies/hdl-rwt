@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 
 `timescale 1ns/100ps
 
@@ -42,7 +43,7 @@ module rwt_common_dac_if (
   output            s_user_empty,
   output [9:0]      s_user_room,
 
-  // 9002 interface
+  // 9361 interface
   input             dac_rst,
   input             dac_clk,
   output reg [63:0] dac_data,
@@ -227,7 +228,7 @@ module rwt_common_dac_if (
     .s_axis_full(),
     .m_axis_empty(s_user_empty),
 
-    // 9002 Side
+    // 9361 Side
     .m_axis_aclk(dac_clk),
     .m_axis_aresetn(dac_rstn),
     .m_axis_ready(m_dac_ready),

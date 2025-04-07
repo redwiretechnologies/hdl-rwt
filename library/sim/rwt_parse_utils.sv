@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 `ifndef RWT_PARSE_UTILS_SV
 `define RWT_PARSE_UTILS_SV
 

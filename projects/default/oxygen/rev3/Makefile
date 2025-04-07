@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 PROJECT_NAME := oxygen_default
 REVISION := rev3
 M_CUSTOM_LIBS :=

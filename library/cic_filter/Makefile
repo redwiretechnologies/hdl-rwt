@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 LIB_NAME = cic_filter
 M_DEPS += \
   src/cic_filter.v \

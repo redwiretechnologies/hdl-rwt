@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 #create_bd_port -dir I ref_clk
 
 create_bd_port -dir I tx_output_enable

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 module rwt_sample_pack #(
   parameter UWIDTH = 1
 )(

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 `timescale 1ns/100ps
 
 module line_mux #(
@@ -23,7 +25,7 @@ wire [NUM_INPUTS+1:0] input_lines_extra;
 assign input_lines_extra = {input_lines, 1'b1, 1'b0};
 assign o = input_lines_extra[current_id];
 
-always @(clk, rstn)
+always @(posedge clk or negedge rstn)
 begin
     if (rstn == 'b0)
     begin

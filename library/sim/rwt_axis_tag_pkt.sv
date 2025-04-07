@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 `ifndef RWT_AXIS_TAG_PKT_SV
 `define RWT_AXIS_TAG_PKT_SV
 

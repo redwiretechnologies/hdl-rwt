@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# SPDX-License-Identifier: Apache-2.0
+
 if [[ $# -lt 1 ]]; then
     echo "Usage: create_all.sh [build_directory]"
     exit 1

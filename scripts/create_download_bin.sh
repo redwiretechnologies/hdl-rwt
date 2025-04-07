@@ -1,6 +1,6 @@
 #!/bin/bash
 
-XILINX_SDK=/opt/Xilinx/Vitis/2021.2
+# SPDX-License-Identifier: Apache-2.0
 
 if [ "$#" -ne 1 ]; then
     echo "Missing XSA file"
@@ -22,7 +22,7 @@ all:
 EOL
 
 
-(cd /tmp && $XILINX_SDK/bin/bootgen -image bootgen.bif -arch zynqmp -w -o download.bin)
+(cd /tmp && bootgen -image bootgen.bif -arch zynqmp -w -o download.bin)
 
 rm /tmp/bootgen.bif
 rm /tmp/download.bit

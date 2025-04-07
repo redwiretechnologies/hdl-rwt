@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 
 `timescale 1ns/100ps
 
@@ -14,7 +15,7 @@ module rwt_common_adc_if (
   output reg [31:0] up_rdata,
   output reg        up_rack,
 
-  // 9002 interface
+  // 9361 interface
   input             adc_rst,
   input             adc_clk,
   input [63:0]      adc_data,
@@ -159,7 +160,7 @@ module rwt_common_adc_if (
     .M_AXIS_REGISTERED(1))
   u_async_fifo_adc (
 
-    // AD9002 side
+    // AD9361 side
     .s_axis_aclk(adc_clk),
     .s_axis_aresetn(adc_rstn),
     .s_axis_ready(adc_ready),

@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 M_DEPS += ../../scripts/griio_bd.tcl
 
 include ../../../common/scripts/common_deps.mk

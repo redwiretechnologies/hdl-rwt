@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# SPDX-License-Identifier: Apache-2.0
+
 if [[ $# -lt 3 ]]; then
     echo "Usage: git_log_pers.sh [file to write] [project name] [repo list]"
     exit 1

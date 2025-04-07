@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 lappend project_files \
   "$script_dir/../../../common/oxygen/rev3/oxygen_system_constr.xdc"
 

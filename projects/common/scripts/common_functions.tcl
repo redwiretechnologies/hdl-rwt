@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 proc dec2bin {i {width {}}} {
     #returns the binary representation of $i
     # width determines the length of the returned string (left truncated or added left 0)

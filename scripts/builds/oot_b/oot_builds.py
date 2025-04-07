@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 def merge(a, b):
     a_keys = list(a.keys())
     b_keys = list(b.keys())

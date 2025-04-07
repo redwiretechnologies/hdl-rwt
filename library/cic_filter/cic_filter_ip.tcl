@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 # ip
 
 set AD_LIB_DIR [lindex $argv 0]

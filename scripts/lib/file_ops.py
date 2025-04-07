@@ -1,5 +1,7 @@
 import os
 
+# SPDX-License-Identifier: Apache-2.0
+
 def find_files(ext, directory, my_filter, exclude, my_type=''):
     all_files = []
     filt = set(my_filter.split(','))

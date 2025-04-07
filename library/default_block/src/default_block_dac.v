@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Apache-2.0
+
 /****************************************************************************
  * DAC
  *   Unpack the data. If only one channel is enabled, it unpacks one 64-bit
