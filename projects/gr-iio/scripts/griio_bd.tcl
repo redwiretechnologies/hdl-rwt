@@ -60,7 +60,8 @@ create_bd_port -dir O tdd_sync_cntr
 
 ad_ip_instance axi_adrv9001 axi_adrv9001
 ad_ip_parameter axi_adrv9001 CONFIG.CMOS_LVDS_N 0
-ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX 1
+ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX1 1
+ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX2 1
 
 # dma for rx1
 
