@@ -5,7 +5,7 @@
 //    12-15 : Reserved
 //    16-21 : RF Personality GPIO (IO)
 //    22    : Pushbutton Interrupt (In)
-//    23    : Pushbutton Reset Power (In)
+//    23    : Reserved
 //    24    : Watchdog (Out)
 //    25    : USBC ID (In)
 //    26-31 : Reserved
@@ -52,15 +52,14 @@ module system_top (
   inout [11:0]  gpio_hdr,
   inout [5:0]   gpio_rf,
 
-  input         pps,
+  input         gps_pps,
   output        wd,
 
   input         usbc_id,
 
   input         emio_uart1_rxd,
   output        emio_uart1_txd,
-  input         pb_int,
-  input         pb_rst_pwr
+  input         pb_int
 );
   genvar i;
 
@@ -71,6 +70,7 @@ module system_top (
   // Reserved
   assign gpio_i[94:49] = gpio_o[94:49];
   assign gpio_i[31:26] = gpio_o[31:26];
+  assign gpio_i[23] = gpio_o[23];
   assign gpio_i[15:13] = gpio_o[15:13];
 
   // AD9361 GPIO [48:32]
@@ -84,7 +84,6 @@ module system_top (
 
   // Misc Signals
   assign gpio_i[22] = pb_int;
-  assign gpio_i[23] = pb_rst_pwr;
   assign gpio_i[24] = gpio_o[24];
   assign wd = gpio_t[24] ? 1'bz : gpio_o[24];
   assign gpio_i[25] = usbc_id;
@@ -124,7 +123,7 @@ module system_top (
        .ps_intr_11 (1'b0),
        .ps_intr_14 (1'b0),
        .ps_intr_15 (1'b0),
-       .pps(pps),
+       .pps(gps_pps),
        .rx_clk_in_n (rx_clk_in_n),
        .rx_clk_in_p (rx_clk_in_p),
        .rx_data_in_n (rx_data_in_n),
