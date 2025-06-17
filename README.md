@@ -16,10 +16,10 @@ For issues with this repository, its documentation, or additional questions, ple
 # Requirements
 
 * Linux OS
-* Vivado 2023.2
+* Vivado 2024.2
 * git
 * make
-* Analog Devices [hdl](https://github.com/analogdevicesinc/hdl/tree/2023_R2) (Please note that this is the specific commit that builds have been tested against) checked out into the same folder as `hdl-rwt`
+* Analog Devices [hdl](https://github.com/analogdevicesinc/hdl/tree/main) (Please note that this is the specific commit that builds have been tested against) checked out into the same folder as `hdl-rwt`
 * Python 3.x
 * Python Libraries
     * Subprocess
@@ -46,7 +46,7 @@ For issues with this repository, its documentation, or additional questions, ple
         * gi
         * sys
 * For generating DTS for created projects
-    * [device-tree-xlnx](https://github.com/Xilinx/device-tree-xlnx/tree/xilinx_v2023.2) (Please note that this is the specific required commit for this version of Vivado)
+    * [device-tree-xlnx](https://github.com/Xilinx/device-tree-xlnx/tree/xilinx_v2024.2) (Please note that this is the specific required commit for this version of Vivado)
 
 --- 
 
