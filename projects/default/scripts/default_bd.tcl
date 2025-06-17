@@ -48,10 +48,10 @@ ad_ip_parameter axi_ad9361_adc_dma CONFIG.SYNC_TRANSFER_START 1
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_SG_TRANSFER 1
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SRC 64
+ad_ip_parameter axi_ad9361_adc_dma CONFIG.DMA_DATA_WIDTH_SG 64
 ad_ip_parameter axi_ad9361_adc_dma CONFIG.CACHE_COHERENT 1
-ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_AXCACHE 0b1111
-ad_ip_parameter axi_ad9361_adc_dma CONFIG.AXI_AXPROT 0b010
 
 ad_ip_instance axi_dmac axi_ad9361_dac_dma
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_TYPE_SRC 0
@@ -61,10 +61,10 @@ ad_ip_parameter axi_ad9361_dac_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_SLICE_DEST 1
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_2D_TRANSFER 0
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_SG_TRANSFER 1
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter axi_ad9361_dac_dma CONFIG.DMA_DATA_WIDTH_SG 64
 ad_ip_parameter axi_ad9361_dac_dma CONFIG.CACHE_COHERENT 1
-ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_AXCACHE 0b1111
-ad_ip_parameter axi_ad9361_dac_dma CONFIG.AXI_AXPROT 0b010
 
 # ad9361 -> Outside world
 
@@ -169,9 +169,11 @@ ad_connect sys_user_resetn default_block/s_dac_dma_aresetn
 
 # DMA
 ad_connect sys_cpu_resetn axi_ad9361_adc_dma/m_dest_axi_aresetn
+ad_connect sys_cpu_resetn axi_ad9361_adc_dma/m_sg_axi_aresetn
 
 # ADC
 ad_connect sys_cpu_resetn axi_ad9361_dac_dma/m_src_axi_aresetn
+ad_connect sys_cpu_resetn axi_ad9361_dac_dma/m_sg_axi_aresetn
 
 # interconnects
 
@@ -182,7 +184,10 @@ ad_cpu_interconnect 0x7D000000 default_block
 
 ad_mem_hpc0_interconnect sys_cpu_clk sys_ps7/S_AXI_HPC0
 ad_mem_hpc0_interconnect sys_cpu_clk axi_ad9361_adc_dma/m_dest_axi
-ad_mem_hpc0_interconnect sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
+ad_mem_hpc0_interconnect sys_cpu_clk axi_ad9361_adc_dma/m_sg_axi
+ad_mem_hpc1_interconnect sys_cpu_clk sys_ps7/S_AXI_HPC1
+ad_mem_hpc1_interconnect sys_cpu_clk axi_ad9361_dac_dma/m_src_axi
+ad_mem_hpc1_interconnect sys_cpu_clk axi_ad9361_dac_dma/m_sg_axi
 
 # interrupts
 
