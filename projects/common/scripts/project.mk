@@ -11,7 +11,7 @@ M_VIVADO := vivado -mode batch -source
 
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-M_REPOS += hdl-rwt hdl-adi
+M_REPOS += hdl-9002 hdl-adi
 
 M_DEPS += $(ADI_PROJ_DIR)/scripts/adi_project_xilinx.tcl
 M_DEPS += $(ADI_SRC_TREE)/scripts/adi_env.tcl

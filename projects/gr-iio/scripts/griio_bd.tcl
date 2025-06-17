@@ -1,4 +1,7 @@
-# SPDX-License-Identifier: Apache-2.0
+###############################################################################
+## Copyright (C) 2020-2025 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: ADIBSD
+###############################################################################
 
 #create_bd_port -dir I ref_clk
 
@@ -27,6 +30,8 @@ create_bd_port -dir I rx2_strobe_in_p
 
 create_bd_port -dir O tx1_dclk_out_n
 create_bd_port -dir O tx1_dclk_out_p
+create_bd_port -dir I tx1_dclk_in_n
+create_bd_port -dir I tx1_dclk_in_p
 create_bd_port -dir O tx1_idata_out_n
 create_bd_port -dir O tx1_idata_out_p
 create_bd_port -dir O tx1_qdata_out_n
@@ -36,6 +41,8 @@ create_bd_port -dir O tx1_strobe_out_p
 
 create_bd_port -dir O tx2_dclk_out_n
 create_bd_port -dir O tx2_dclk_out_p
+create_bd_port -dir I tx2_dclk_in_n
+create_bd_port -dir I tx2_dclk_in_p
 create_bd_port -dir O tx2_idata_out_n
 create_bd_port -dir O tx2_idata_out_p
 create_bd_port -dir O tx2_qdata_out_n
@@ -154,7 +161,7 @@ ad_connect  axi_adrv9001/dac_2_clk util_dac_2_upack/clk
 
 ad_connect tx_output_enable  axi_adrv9001/tx_output_enable
 
-ad_connect mssi_sync         axi_adrv9001/mssi_sync
+ad_connect mssi_sync         axi_adrv9001/mssi_sync_in
 
 ad_connect rx1_dclk_in_n     axi_adrv9001/rx1_dclk_in_n_NC
 ad_connect rx1_dclk_in_p     axi_adrv9001/rx1_dclk_in_p_dclk_in
@@ -176,6 +183,8 @@ ad_connect rx2_strobe_in_p   axi_adrv9001/rx2_strobe_in_p_strobe_in
 
 ad_connect tx1_dclk_out_n    axi_adrv9001/tx1_dclk_out_n_NC
 ad_connect tx1_dclk_out_p    axi_adrv9001/tx1_dclk_out_p_dclk_out
+ad_connect tx1_dclk_in_n     axi_adrv9001/tx1_dclk_in_n_NC
+ad_connect tx1_dclk_in_p     axi_adrv9001/tx1_dclk_in_p_dclk_in
 ad_connect tx1_idata_out_n   axi_adrv9001/tx1_idata_out_n_idata0
 ad_connect tx1_idata_out_p   axi_adrv9001/tx1_idata_out_p_idata1
 ad_connect tx1_qdata_out_n   axi_adrv9001/tx1_qdata_out_n_qdata2
@@ -185,6 +194,8 @@ ad_connect tx1_strobe_out_p  axi_adrv9001/tx1_strobe_out_p_strobe_out
 
 ad_connect tx2_dclk_out_n    axi_adrv9001/tx2_dclk_out_n_NC
 ad_connect tx2_dclk_out_p    axi_adrv9001/tx2_dclk_out_p_dclk_out
+ad_connect tx2_dclk_in_n     axi_adrv9001/tx2_dclk_in_n_NC
+ad_connect tx2_dclk_in_p     axi_adrv9001/tx2_dclk_in_p_dclk_in
 ad_connect tx2_idata_out_n   axi_adrv9001/tx2_idata_out_n_idata0
 ad_connect tx2_idata_out_p   axi_adrv9001/tx2_idata_out_p_idata1
 ad_connect tx2_qdata_out_n   axi_adrv9001/tx2_qdata_out_n_qdata2
@@ -220,6 +231,7 @@ ad_connect  axi_adrv9001/adc_1_data_q1   util_adc_1_pack/fifo_wr_data_3
 ad_connect  axi_adrv9001/adc_1_dovf      util_adc_1_pack/fifo_wr_overflow
 
 ad_connect util_adc_1_pack/packed_fifo_wr axi_adrv9001_rx1_dma/fifo_wr
+ad_connect util_adc_1_pack/packed_sync axi_adrv9001_rx1_dma/sync
 
 # RX2 - CPACK - RX_DMA2
 ad_connect  axi_adrv9001/adc_2_rst       util_adc_2_pack/reset
@@ -232,6 +244,7 @@ ad_connect  axi_adrv9001/adc_2_data_q0   util_adc_2_pack/fifo_wr_data_1
 ad_connect  axi_adrv9001/adc_2_dovf       util_adc_2_pack/fifo_wr_overflow
 
 ad_connect util_adc_2_pack/packed_fifo_wr axi_adrv9001_rx2_dma/fifo_wr
+ad_connect util_adc_2_pack/packed_sync axi_adrv9001_rx2_dma/sync
 
 # TX_DMA1 - UPACK - TX1
 ad_connect  axi_adrv9001/dac_1_rst        util_dac_1_upack/reset

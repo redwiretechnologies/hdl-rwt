@@ -12,7 +12,7 @@ set AD_PROJ_DIR [lindex $argv 0]
 source $AD_PROJ_DIR/scripts/adi_env.tcl
 
 set my_list [ split $script_dir / ]
-set hdl_rwt [ lsearch -exact $my_list "hdl-rwt" ]
+set hdl_rwt [ lsearch -exact $my_list "hdl-9002" ]
 set personality [ lindex $my_list $hdl_rwt+2 ]
 set carrier [ lindex $my_list $hdl_rwt+3 ]
 set carrier_rev [ lindex $my_list $hdl_rwt+4 ]

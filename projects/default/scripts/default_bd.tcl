@@ -27,6 +27,8 @@ create_bd_port -dir I rx2_strobe_in_p
 
 create_bd_port -dir O tx1_dclk_out_n
 create_bd_port -dir O tx1_dclk_out_p
+create_bd_port -dir I tx1_dclk_in_n
+create_bd_port -dir I tx1_dclk_in_p
 create_bd_port -dir O tx1_idata_out_n
 create_bd_port -dir O tx1_idata_out_p
 create_bd_port -dir O tx1_qdata_out_n
@@ -36,6 +38,8 @@ create_bd_port -dir O tx1_strobe_out_p
 
 create_bd_port -dir O tx2_dclk_out_n
 create_bd_port -dir O tx2_dclk_out_p
+create_bd_port -dir I tx2_dclk_in_n
+create_bd_port -dir I tx2_dclk_in_p
 create_bd_port -dir O tx2_idata_out_n
 create_bd_port -dir O tx2_idata_out_p
 create_bd_port -dir O tx2_qdata_out_n
@@ -113,6 +117,7 @@ ad_ip_instance axi_dmac axi_adrv9001_tx1_dma
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.DMA_TYPE_DEST 1
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.CYCLIC 1
+ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.DMA_2D_TRANSFER 0
@@ -125,6 +130,7 @@ ad_ip_instance axi_dmac axi_adrv9001_tx2_dma
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_TYPE_SRC 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_TYPE_DEST 1
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.CYCLIC 1
+ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_2D_TRANSFER 0
@@ -146,7 +152,7 @@ ad_connect  sys_500m_clk       axi_adrv9001/delay_clk
 
 ad_connect tx_output_enable  axi_adrv9001/tx_output_enable
 
-ad_connect mssi_sync         axi_adrv9001/mssi_sync
+ad_connect mssi_sync         axi_adrv9001/mssi_sync_in
 
 ad_connect rx1_dclk_in_n     axi_adrv9001/rx1_dclk_in_n_NC
 ad_connect rx1_dclk_in_p     axi_adrv9001/rx1_dclk_in_p_dclk_in
@@ -168,6 +174,8 @@ ad_connect rx2_strobe_in_p   axi_adrv9001/rx2_strobe_in_p_strobe_in
 
 ad_connect tx1_dclk_out_n    axi_adrv9001/tx1_dclk_out_n_NC
 ad_connect tx1_dclk_out_p    axi_adrv9001/tx1_dclk_out_p_dclk_out
+ad_connect tx1_dclk_in_n     axi_adrv9001/tx1_dclk_in_n_NC
+ad_connect tx1_dclk_in_p     axi_adrv9001/tx1_dclk_in_p_dclk_in
 ad_connect tx1_idata_out_n   axi_adrv9001/tx1_idata_out_n_idata0
 ad_connect tx1_idata_out_p   axi_adrv9001/tx1_idata_out_p_idata1
 ad_connect tx1_qdata_out_n   axi_adrv9001/tx1_qdata_out_n_qdata2
@@ -177,6 +185,8 @@ ad_connect tx1_strobe_out_p  axi_adrv9001/tx1_strobe_out_p_strobe_out
 
 ad_connect tx2_dclk_out_n    axi_adrv9001/tx2_dclk_out_n_NC
 ad_connect tx2_dclk_out_p    axi_adrv9001/tx2_dclk_out_p_dclk_out
+ad_connect tx2_dclk_in_n     axi_adrv9001/tx2_dclk_in_n_NC
+ad_connect tx2_dclk_in_p     axi_adrv9001/tx2_dclk_in_p_dclk_in
 ad_connect tx2_idata_out_n   axi_adrv9001/tx2_idata_out_n_idata0
 ad_connect tx2_idata_out_p   axi_adrv9001/tx2_idata_out_p_idata1
 ad_connect tx2_qdata_out_n   axi_adrv9001/tx2_qdata_out_n_qdata2
