@@ -18,6 +18,7 @@ all_args=("$@")
 fw=$1
 pn=$2
 rs=("${all_args[@]:2}")
+python3 ./scripts/git_log_pers.py "$fw.full" "$pn" "${all_args[@]:2}"
 
 echo -n "$pn|" > $tmpfile
 head -n1 git_log_compressed.txt >> $tmpfile
