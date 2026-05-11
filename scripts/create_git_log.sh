@@ -3,7 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 git_print () {
-    git fetch > /dev/null
+    echo -n "Operating on $1... "
+    timeout 10s git fetch > /dev/null
     a=$(git status --porcelain)
     c=$(git rev-parse HEAD)
     s=$(git show --no-notes --no-patch --format=medium $c | grep -Ev Author)
@@ -29,6 +30,7 @@ git_print () {
         rm $tmpfile
     fi
     echo "------------------------------------------------------------------------------------------" >> $2
+    echo "Done"
 }
 
 if [ -f git_log.txt ]; then
@@ -41,7 +43,9 @@ n=$(basename "$PWD")
 echo "Build date: $d" > git_log.txt
 echo "" >> git_log.txt
 echo "------------------------------------------------------------------------------------------" >> git_log.txt
+echo -n "Unlinking... "
 ./scripts/unlink_oot.sh
+echo "Done"
 git_print $n git_log.txt
 builtin cd ../hdl
 git_print hdl-adi ../$n/git_log.txt
@@ -54,6 +58,14 @@ do
 done
 builtin cd ..
 echo "------------------------------------------------------------------------------------------" >> git_log.txt
+echo ""
+echo "Finished with all repos"
+echo ""
+echo -n "Linking... "
 ./scripts/link_oot.sh
+echo "Done"
+echo -n "Creating compressed file..."
 
 sed '/^$/d' git_log.txt | sed -z 's/\n-\+\n-\+\n/~/g' | sed -z 's/\s*Build date:\s*//g' | sed 's/^\s*commit\s*//g' | sed 's/^\s*Date:\s*//g' | sed -z 's/\n\s*/|/g' | sed 's/~$/\n/g' | sed 's/~/\n~/g' > git_log_compressed.txt
+
+echo "Done"
