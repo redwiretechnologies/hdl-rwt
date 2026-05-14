@@ -21,7 +21,7 @@ rs=("${all_args[@]:2}")
 python3 ./scripts/git_log_pers.py "$fw.full" "$pn" "${all_args[@]:2}"
 
 echo -n "$pn|" > $tmpfile
-head -n1 git_log_compressed.txt >> $tmpfile
+date >> $tmpfile
 for val in ${rs[@]}; do
     grep "~$val|" git_log_compressed.txt >> $tmpfile
 done
