@@ -312,7 +312,6 @@ def parse_args():
     parser.add_argument("--clean_lib", help="Clean libraries instead of creating projects", action="store_true")
     parser.add_argument("-d", "--dry_run", help="Don't actually run any commands. Just print them", action="store_true")
     parser.add_argument("-n", "--num_builds", type=int, default=1, help="Number of simultaneous make commands to run.")
-    parser.add_argument("-g", "--git_log", help="Create a log of the git repos to put into each xsa file", action="store_true")
     parser.add_argument("--depends", help="Show dependencies for each project based on the M_REPOS variable", action="store_true")
     parser.add_argument("--new_rev", action="store_true", help="Use the newest revision of a carrier board only")
     parser.add_argument("--new_srev", action="store_true", help="Use the newest revision of a SOM only")
@@ -354,7 +353,7 @@ def add_git_log(selections):
 
     for b in build_list:
         build_dir = script_dir + "/../projects/" + '/'.join(b)
-        subprocess.call("/bin/bash -c 'zip -u {}/*.sdk/*.xsa {}/git_log.txt > /dev/null'".format(build_dir, build_dir), shell=True)
+        subprocess.call("/bin/bash -c 'zip -u -j {}/*.sdk/*.xsa {}/git_log.txt.full > /dev/null'".format(build_dir, build_dir), shell=True)
 
 def main():
     args = parse_args()
@@ -370,8 +369,7 @@ def main():
         multi_process_depends(args.num_builds, lib_list)
     else:
         multi_process_builds(args.num_builds, lib_list, build_list)
-    if args.git_log:
-        add_git_log(selections)
+    add_git_log(selections)
 
 if __name__=="__main__":
     main()

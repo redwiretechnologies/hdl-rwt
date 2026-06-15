@@ -6,7 +6,8 @@ module line_matrix #(
     parameter NUM_INPUTS  = 10,
     parameter NUM_OUTPUTS = 10)
 (
-    input clk,
+    input sys_clk,
+    input clk_pin,
     input rstn,
 
     input  [NUM_INPUTS-1:0]  input_lines,
@@ -24,7 +25,8 @@ module line_matrix #(
             line_mux   #( .NUM_INPUTS(NUM_INPUTS),
                           .NUM_OUTPUTS(NUM_OUTPUTS),
                           .ID(i))
-                    lm0 ( .clk(clk),
+                    lm0 ( .sys_clk(sys_clk) ,
+                          .clk_pin(clk_pin),
                           .rstn(rstn),
                           .input_select(input_select),
                           .output_select(output_select),

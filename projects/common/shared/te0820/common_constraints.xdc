@@ -27,12 +27,6 @@ set_property -dict {PACKAGE_PIN B8  IOSTANDARD LVCMOS18} [get_ports {gpio_rf[3]}
 set_property -dict {PACKAGE_PIN G3  IOSTANDARD LVCMOS18} [get_ports {gpio_rf[4]}]
 set_property -dict {PACKAGE_PIN F3  IOSTANDARD LVCMOS18} [get_ports {gpio_rf[5]}]
 
-################################################################################
-## Misc Carrier board GPIO
-################################################################################
-set_property -dict {PACKAGE_PIN A5  IOSTANDARD LVCMOS18} [get_ports pb_int]
-set_property -dict {PACKAGE_PIN B5  IOSTANDARD LVCMOS18} [get_ports pb_rst_pwr]
-set_property -dict {PACKAGE_PIN N9  IOSTANDARD LVCMOS18 PULLUP true} [get_ports usbc_id]
 
 # The next line corrects the following DRC error:
 #     ERROR: [DRC PDRC-203] BITSLICE0 not available during BISC: The port gpio_hdr[0] is
