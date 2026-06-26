@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
-export ADI_SRC_TREE := $(abspath ../../../../../hdl)
+export ADI_SRC_TREE := $(abspath ../../../../../hdl-adi-9002)
 
 export ADI_PROJ_DIR := $(ADI_SRC_TREE)/projects
 export ADI_LIB_DIR := $(ADI_SRC_TREE)/library

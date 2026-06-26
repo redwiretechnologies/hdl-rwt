@@ -47,7 +47,7 @@ echo -n "Unlinking... "
 ./scripts/unlink_oot.sh
 echo "Done"
 git_print $n git_log.txt
-builtin cd ../hdl
+builtin cd ../hdl-adi-9002
 git_print hdl-adi ../$n/git_log.txt
 builtin cd ../$n/oot
 for f in $(ls)
