@@ -268,8 +268,7 @@ module default_block #(
    ***************************************************************************/
 
   default_block_user #(
-    .CLK_FREQ(CLK_FREQ),
-    .ENABLE_DUAL_CIC(ENABLE_DUAL_CIC)
+    .CLK_FREQ(CLK_FREQ)
   )
   i_user(
     .user_clk(user_clk),
