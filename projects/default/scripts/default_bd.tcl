@@ -79,11 +79,9 @@ ad_ip_instance concat_9002 concat_9002_1
 
 ad_ip_instance  default_block   default_block_0
 ad_ip_parameter default_block_0 CONFIG.CLK_FREQ 100000000
-ad_ip_parameter default_block_0 CONFIG.ENABLE_DUAL_CIC 1
 
 ad_ip_instance  default_block   default_block_1
 ad_ip_parameter default_block_1 CONFIG.CLK_FREQ 100000000
-ad_ip_parameter default_block_1 CONFIG.ENABLE_DUAL_CIC 0
 
 # dma for rx1
 
