@@ -3,8 +3,7 @@
 `timescale 1ns/100ps
 
 module default_block_user #(
-  parameter CLK_FREQ = 100000000,
-  parameter ENABLE_DUAL_CIC = 0
+  parameter CLK_FREQ = 100000000
 )(
   input         user_clk,
   input         user_resetn,
@@ -96,19 +95,6 @@ module default_block_user #(
   wire [55:0] sample_idx_adc;
   wire [55:0] sample_idx_dac;
 
-  //For CIC filter
-  wire [31:0] cfg_adc_decimation_ratio;
-  wire [ 2:0] cfg_adc_filter_mask;
-  wire        cfg_adc_correction_enable_a;
-  wire        cfg_adc_correction_enable_b;
-  wire [15:0] cfg_adc_correction_coefficient_a;
-  wire [15:0] cfg_adc_correction_coefficient_b;
-  wire        cfg_adc_filter_reset;
-  wire [4:0]  cfg_adc_filter_id;
-  wire [63:0] adc_dec_data;
-  wire [3:0]  adc_dec_valid;
-  wire        cic_2_filter_reset;
-
   default_block_regs #(
     .ASYNC_CLK(1))
   regs (
@@ -140,84 +126,8 @@ module default_block_user #(
     .cfg_overflow_enabled(cfg_overflow_enabled),
     .cfg_overflow_wait(cfg_overflow_wait),
     .cfg_hold_enabled(cfg_hold_enabled),
-    .cfg_sample_idx_mode(cfg_sample_idx_mode),
-
-    //For CIC filter
-    .cfg_adc_decimation_ratio(cfg_adc_decimation_ratio),
-    .cfg_adc_filter_mask(cfg_adc_filter_mask),
-    .cfg_adc_correction_enable_a(cfg_adc_correction_enable_a),
-    .cfg_adc_correction_enable_b(cfg_adc_correction_enable_b),
-    .cfg_adc_correction_coefficient_a(cfg_adc_correction_coefficient_a),
-    .cfg_adc_correction_coefficient_b(cfg_adc_correction_coefficient_b),
-    .cfg_adc_filter_reset(cfg_adc_filter_reset),
-    .cfg_adc_filter_id(cfg_adc_filter_id)
+    .cfg_sample_idx_mode(cfg_sample_idx_mode)
   );
-
-  //For CIC filter
-  assign s_adc_ready = 1'b1;
-  cic_filter
-  #( .FILTER_ID('d0))
-  cic_0 (
-    .adc_clk(s_adc_aclk),
-    .adc_rst(!s_adc_aresetn),
-
-    .adc_data_a(s_adc_data[15:0]),
-    .adc_data_b(s_adc_data[31:16]),
-    .adc_valid_a(s_adc_valid),
-    .adc_valid_b(s_adc_valid),
-    .adc_enable_a(s_adc_enables[0]),
-    .adc_enable_b(s_adc_enables[1]),
-
-    .adc_dec_data_a(adc_dec_data[15:0]),
-    .adc_dec_data_b(adc_dec_data[31:16]),
-    .adc_dec_valid_a(adc_dec_valid[0]),
-    .adc_dec_valid_b(adc_dec_valid[1]),
-
-    .filter_id(cfg_adc_filter_id),
-    .decimation_ratio(cfg_adc_decimation_ratio),
-    .filter_mask(cfg_adc_filter_mask),
-    .adc_correction_enable_a(cfg_adc_correction_enable_a),
-    .adc_correction_enable_b(cfg_adc_correction_enable_b),
-    .adc_correction_coefficient_a(cfg_adc_correction_coefficient_a),
-    .adc_correction_coefficient_b(cfg_adc_correction_coefficient_b),
-    .adc_filter_reset(cfg_adc_filter_reset)
-  );
-  cic_filter
-  #( .FILTER_ID('d0))
-  cic_1 (
-    .adc_clk(s_adc_aclk),
-    .adc_rst(!s_adc_aresetn),
-
-    .adc_data_a(s_adc_data[47:32]),
-    .adc_data_b(s_adc_data[63:48]),
-    .adc_valid_a(s_adc_valid),
-    .adc_valid_b(s_adc_valid),
-    .adc_enable_a(s_adc_enables[2]),
-    .adc_enable_b(s_adc_enables[3]),
-
-    .adc_dec_data_a(adc_dec_data[47:32]),
-    .adc_dec_data_b(adc_dec_data[63:48]),
-    .adc_dec_valid_a(adc_dec_valid[2]),
-    .adc_dec_valid_b(adc_dec_valid[3]),
-
-    .filter_id(cfg_adc_filter_id),
-    .decimation_ratio(cfg_adc_decimation_ratio),
-    .filter_mask(cfg_adc_filter_mask),
-    .adc_correction_enable_a(cfg_adc_correction_enable_a),
-    .adc_correction_enable_b(cfg_adc_correction_enable_b),
-    .adc_correction_coefficient_a(cfg_adc_correction_coefficient_a),
-    .adc_correction_coefficient_b(cfg_adc_correction_coefficient_b),
-    .adc_filter_reset(cic_2_filter_reset)
-  );
-  //By holding the adc_filter_reset line high constantly, we should be able to
-  //optimize out the second CIC filter
-  generate
-      if (ENABLE_DUAL_CIC == 1) begin
-          assign cic_2_filter_reset = cfg_adc_filter_reset;
-      end else begin
-          assign cic_2_filter_reset = 1'b1;
-      end
-  endgenerate
 
   /****************************************************************************
    * sample_clk
@@ -263,9 +173,9 @@ module default_block_user #(
     .sample_idx(sample_idx_adc),
 
     .s_rf_ready(),
-    .s_rf_valid(adc_dec_valid != 4'b0000),
-    .s_rf_data(adc_dec_data),
-    .s_rf_enables(adc_dec_valid),
+    .s_rf_valid(s_adc_valid),
+    .s_rf_data(s_adc_data),
+    .s_rf_enables(s_adc_enables),
     .s_rf_level(s_adc_level),
 
     .m_dma_ready(m_adc_ready),

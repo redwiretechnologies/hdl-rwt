@@ -30,8 +30,6 @@ set src_files [list \
   "$ad_hdl_dir/library/axi_adc_decimate/axi_adc_decimate_filter.v" \
   "$ad_hdl_dir/library/axi_adc_decimate/cic_decim.v" \
   "$ad_hdl_dir/library/axi_adc_decimate/fir_decim.v" \
-  "$ad_hdl_dir/library/util_cic/cic_int.v" \
-  "$ad_hdl_dir/library/util_cic/cic_comb.v" \
   "$script_dir/../common/rwt_common_adc_if.v" \
   "$script_dir/../common/rwt_common_dac_if.v" \
   "$script_dir/../common/rwt_common_regs.v" \
