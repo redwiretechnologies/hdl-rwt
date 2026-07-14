@@ -3,7 +3,7 @@
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-#create_bd_port -dir I ref_clk
+create_bd_port -dir I ref_clk
 
 create_bd_port -dir I tx_output_enable
 
@@ -68,7 +68,7 @@ create_bd_port -dir O tdd_sync_cntr
 ad_ip_instance axi_adrv9001 axi_adrv9001
 ad_ip_parameter axi_adrv9001 CONFIG.CMOS_LVDS_N 0
 ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX1 1
-ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX2 1
+ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX2 2
 
 # dma for rx1
 
@@ -141,7 +141,7 @@ ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.SYNC_TRANSFER_START 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.AXI_SLICE_SRC 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_2D_TRANSFER 0
-ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_DATA_WIDTH_DEST 64
+ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_DATA_WIDTH_DEST 32
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.CACHE_COHERENT 1
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXCACHE 0b1111
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXPROT 0b010
@@ -166,7 +166,7 @@ ad_connect  axi_adrv9001/dac_1_clk util_dac_1_upack/clk
 ad_connect  axi_adrv9001/dac_2_clk axi_adrv9001_tx2_dma/m_axis_aclk
 ad_connect  axi_adrv9001/dac_2_clk util_dac_2_upack/clk
 
-#ad_connect ref_clk           axi_adrv9001/ref_clk
+ad_connect ref_clk           axi_adrv9001/ref_clk
 
 ad_connect tx_output_enable  axi_adrv9001/tx_output_enable
 

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
-#create_bd_port -dir I ref_clk
+create_bd_port -dir I ref_clk
 
 create_bd_port -dir I tx_output_enable
 
@@ -69,7 +69,9 @@ create_bd_port -dir I pps
 ad_ip_instance axi_adrv9001 axi_adrv9001
 ad_ip_parameter axi_adrv9001 CONFIG.CMOS_LVDS_N 0
 ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX1 1
-ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX2 1
+ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX2 2
+ad_ip_parameter axi_adrv9001 CONFIG.RX_USE_BUFG 1
+ad_ip_parameter axi_adrv9001 CONFIG.TX_USE_BUFG 1
 
 ad_ip_instance proc_sys_reset adc_clk_reset_0
 ad_ip_instance proc_sys_reset adc_clk_reset_1
@@ -154,7 +156,7 @@ ad_connect  sys_500m_clk       axi_adrv9001/delay_clk
 #ad_connect  axi_adrv9001/dac_2_clk axi_adrv9001_tx2_dma/m_axis_aclk
 ####
 
-#ad_connect ref_clk           axi_adrv9001/ref_clk
+ad_connect ref_clk           axi_adrv9001/ref_clk
 
 ad_connect tx_output_enable  axi_adrv9001/tx_output_enable
 
