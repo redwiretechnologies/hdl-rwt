@@ -3,7 +3,7 @@
 from builds.te0820_soms import *
 from builds.oot_b import *
 
-rwt_te0820_carrier_images = ["blank", "default", "gr-iio"]
+rwt_te0820_carrier_images = ["default", "gr-iio"]
 
 supported_builds = { "oxygen"  : {
                                      "revisions" : ["rev3"],

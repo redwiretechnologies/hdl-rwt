@@ -81,7 +81,7 @@ set_property -dict {PACKAGE_PIN AF2 IOSTANDARD LVCMOS18} [get_ports spi_miso]
 set_property -dict {PACKAGE_PIN E5  IOSTANDARD LVCMOS18} [get_ports dev_clk_in]
 
 # clocks
-create_clock -period 4.000 -name rx1_clk [get_ports rx1_clk_in_p]
-create_clock -period 4.000 -name rx2_clk [get_ports rx2_clk_in_p]
+create_clock -period 4.000 -name rx1_clk [get_ports rx1_dclk_in_p]
+create_clock -period 4.000 -name rx2_clk [get_ports rx2_dclk_in_p]
 
 set_property UNAVAILABLE_DURING_CALIBRATION TRUE [get_ports tx1_dclk_out_p]
