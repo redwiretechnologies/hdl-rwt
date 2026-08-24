@@ -277,7 +277,7 @@ module system_top (
     .spi0_mosi (spi_mosi),
     .spi0_sclk (spi_clk),
 
-    .pps(pps),
+    .pps(gps_pps),
     .emio_uart1_rxd(emio_uart1_rxd),
     .emio_uart1_txd(emio_uart1_txd)
   );
