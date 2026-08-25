@@ -146,7 +146,7 @@ def make_library(clean, dry_run, n=1):
     return ret
 
 # Construct the proper argument to pass to make for the given boards
-def create_board_list(boards, projects_only, clean):
+def create_board_list(boards, projects_only, clean, ignore_fail):
     interm_board_list = []
     for board, srevs in boards.items():
         for srev in srevs:
@@ -154,12 +154,15 @@ def create_board_list(boards, projects_only, clean):
     board_list = []
     projects = ""
     clean_str = ""
-    if projects_only:
-        projects = "proj-"
+    failures = ""
     if clean:
         clean_str = "clean-"
+    elif projects_only:
+        projects = "proj-"
+    elif ignore_fail:
+        failures = "-ignore-fail"
     for b in interm_board_list:
-        board_list.append(projects+clean_str+b)
+        board_list.append(projects+clean_str+b+failures)
     return board_list
 
 # Make a singular board
@@ -220,14 +223,14 @@ def cd_and_make(carrier, revision, personality, board_list, dry_run):
             os.chdir(cwd)
 
 # Create the list of builds to be done
-def iterate_selections(selections, projects_only, clean, clean_lib, dry_run):
+def iterate_selections(selections, projects_only, clean, clean_lib, ignore_fail, dry_run):
     lib_list = []
     build_list = []
     for carrier, val in selections.items():
         for revision, val2 in val.items():
             for personality, boards in val2.items():
                 lib_list.append([carrier, revision, personality, clean_lib, dry_run])
-                for b in create_board_list(boards, projects_only, clean):
+                for b in create_board_list(boards, projects_only, clean, ignore_fail):
                     build_list.append([carrier, revision, personality, b, dry_run])
     return lib_list, build_list
 
@@ -308,6 +311,7 @@ def parse_args():
     parser.add_argument("-b", "--boards", help="Automatically select all boards", action="store_true")
     parser.add_argument("-s", "--som_revisions", help="Automatically select all som_revisions", action="store_true")
     parser.add_argument("-o", "--only_projects", help="Only create projects", action="store_true")
+    parser.add_argument("-i", "--ignore_failures", help="Ignore building again if project file already exists", action="store_true")
     parser.add_argument("--clean", help="Clean instead of creating projects", action="store_true")
     parser.add_argument("--clean_lib", help="Clean libraries instead of creating projects", action="store_true")
     parser.add_argument("-d", "--dry_run", help="Don't actually run any commands. Just print them", action="store_true")
@@ -364,7 +368,7 @@ def main():
         print("")
         print("Received keyboard interrupt. Terminating")
         exit(1)
-    lib_list, build_list = iterate_selections(selections, args.only_projects, args.clean, args.clean_lib, args.dry_run)
+    lib_list, build_list = iterate_selections(selections, args.only_projects, args.clean, args.clean_lib, args.ignore_failures, args.dry_run)
     if args.depends:
         multi_process_depends(args.num_builds, lib_list)
     else:
