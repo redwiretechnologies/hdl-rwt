@@ -9,7 +9,7 @@ import multiprocessing
 from builds.supported_builds import *
 
 # Get a selection from a list
-def get_item_selection(selection_list, item_name, extra_text="", select_all = False, select_newest=False, filter_list=None):
+def get_item_selection(selection_list, item_name, extra_text="", select_all = False, select_newest=False, filter_list=None, filter_list_exact=None):
     selecting = True
     valid_selections = [i for i in range(0, len(selection_list)+1)]
     if int(len(selection_list)) == 1:
@@ -20,7 +20,15 @@ def get_item_selection(selection_list, item_name, extra_text="", select_all = Fa
         s = []
         for f in filter_list:
             for index, n in enumerate(selection_list):
-                if f in n:
+                if str(f) in n:
+                    s.append(index)
+        t = set(s)
+        s = list(t)
+    elif filter_list_exact:
+        s = []
+        for f in filter_list_exact:
+            for index, n in enumerate(selection_list):
+                if str(f) == n:
                     s.append(index)
         t = set(s)
         s = list(t)
@@ -51,7 +59,7 @@ def get_item_selection(selection_list, item_name, extra_text="", select_all = Fa
                 selected.append(selection_list[a])
     return selected
 
-def get_all_selections(all_carriers=False, all_revisions=False, all_personalities=False, all_boards=False, all_som_revisions=False, new_rev=False, new_srev=False, c_filt=[], r_filt=[], p_filt=[], b_filt=[], sr_filt=[]):
+def get_all_selections(all_carriers=False, all_revisions=False, all_personalities=False, all_boards=False, all_som_revisions=False, new_rev=False, new_srev=False, c_filt=[], r_filt=[], p_filt=[], p_filt_exact=[], b_filt=[], sr_filt=[]):
     sc = get_item_selection([key for key in supported_builds.keys()], "Carrier", "", all_carriers, False, c_filt)
     if not all_carriers and not c_filt:
         print("")
@@ -79,7 +87,7 @@ def get_all_selections(all_carriers=False, all_revisions=False, all_personalitie
                 personalities = supported_builds[car]["images"]
                 boards = supported_builds[car]["boards"]
                 som_revisions = supported_builds[car]["som_rev"]
-            persons = get_item_selection(personalities, "Personality", " for Revision {} of Carrier {}".format(rev, car), all_personalities, False, p_filt)
+            persons = get_item_selection(personalities, "Personality", " for Revision {} of Carrier {}".format(rev, car), all_personalities, False, p_filt, p_filt_exact)
             if not all_personalities and not p_filt:
                 print("")
             for person in persons:
@@ -322,6 +330,7 @@ def parse_args():
     parser.add_argument("--c_filt", action="append", help="Match carrier boards that contain this string. Can be passed multiple times")
     parser.add_argument("--r_filt", action="append", help="Match revisions for carrier boards that contain this string. Can be passed multiple times")
     parser.add_argument("--p_filt", action="append", help="Match personalities that contain this string. Can be passed multiple times")
+    parser.add_argument("--p_filt_exact", action="append", help="Pass personality name exactly as a string. Can be passed multiple times")
     parser.add_argument("--b_filt", action="append", help="Match SOMs that contain this string. Can be passed multiple times")
     parser.add_argument("--sr_filt", action="append", help="Match SOM revisions that contain this string. Can be passed multiple times")
     args = parser.parse_args()
@@ -363,7 +372,7 @@ def main():
     args = parse_args()
     try:
         create_git_log()
-        selections = get_all_selections(args.carriers, args.revisions, args.personalities, args.boards, args.som_revisions, args.new_rev, args.new_srev, args.c_filt, args.r_filt, args.p_filt, args.b_filt, args.sr_filt)
+        selections = get_all_selections(args.carriers, args.revisions, args.personalities, args.boards, args.som_revisions, args.new_rev, args.new_srev, args.c_filt, args.r_filt, args.p_filt, args.p_filt_exact, args.b_filt, args.sr_filt)
     except KeyboardInterrupt:
         print("")
         print("Received keyboard interrupt. Terminating")
