@@ -82,9 +82,6 @@ ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.CACHE_COHERENT 1
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXCACHE 0b1111
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXPROT 0b010
-
 
 ad_ip_instance util_cpack2 util_adc_1_pack { \
   NUM_OF_CHANNELS 4 \
@@ -103,8 +100,6 @@ ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.CACHE_COHERENT 1
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXCACHE 0b1111
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXPROT 0b010
 
 ad_ip_instance util_cpack2 util_adc_2_pack { \
   NUM_OF_CHANNELS 4 \
@@ -123,8 +118,6 @@ ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.CACHE_COHERENT 1
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXCACHE 0b1111
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXPROT 0b010
 
 ad_ip_instance util_upack2 util_dac_1_upack { \
   NUM_OF_CHANNELS 4 \
@@ -143,8 +136,6 @@ ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_DATA_WIDTH_DEST 32
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.CACHE_COHERENT 1
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXCACHE 0b1111
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXPROT 0b010
 
 ad_ip_instance util_upack2 util_dac_2_upack { \
   NUM_OF_CHANNELS 4 \

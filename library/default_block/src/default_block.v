@@ -3,7 +3,8 @@
 `timescale 1ns/100ps
 
 module default_block #(
-  parameter CLK_FREQ = 100000000
+  parameter CLK_FREQ = 100000000,
+  parameter ENABLE_DUAL_CIC = 0
 )(
   input         user_clk,
   input         user_resetn,
@@ -268,7 +269,8 @@ module default_block #(
    ***************************************************************************/
 
   default_block_user #(
-    .CLK_FREQ(CLK_FREQ)
+    .CLK_FREQ(CLK_FREQ),
+    .ENABLE_DUAL_CIC(ENABLE_DUAL_CIC)
   )
   i_user(
     .user_clk(user_clk),

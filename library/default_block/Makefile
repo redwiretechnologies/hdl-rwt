@@ -3,6 +3,7 @@
 LIB_NAME = default_block
 
 M_DEPS = \
+  ../cic_filter/src/cic_filter.v \
   $(ADI_LIB_DIR)/axi_adc_decimate/axi_adc_decimate_filter.v \
   src/default_block.v \
   src/default_block_user.v \

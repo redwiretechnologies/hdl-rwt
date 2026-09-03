@@ -70,8 +70,6 @@ ad_ip_instance axi_adrv9001 axi_adrv9001
 ad_ip_parameter axi_adrv9001 CONFIG.CMOS_LVDS_N 0
 ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX1 1
 ad_ip_parameter axi_adrv9001 CONFIG.USE_RX_CLK_FOR_TX2 2
-ad_ip_parameter axi_adrv9001 CONFIG.RX_USE_BUFG 1
-ad_ip_parameter axi_adrv9001 CONFIG.TX_USE_BUFG 1
 
 ad_ip_instance proc_sys_reset adc_clk_reset_0
 ad_ip_instance proc_sys_reset adc_clk_reset_1
@@ -81,9 +79,11 @@ ad_ip_instance concat_9002 concat_9002_1
 
 ad_ip_instance  default_block   default_block_0
 ad_ip_parameter default_block_0 CONFIG.CLK_FREQ 100000000
+ad_ip_parameter default_block_0 CONFIG.ENABLE_DUAL_CIC 1
 
 ad_ip_instance  default_block   default_block_1
 ad_ip_parameter default_block_1 CONFIG.CLK_FREQ 100000000
+ad_ip_parameter default_block_1 CONFIG.ENABLE_DUAL_CIC 1
 
 # dma for rx1
 
@@ -97,8 +97,6 @@ ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.CACHE_COHERENT 1
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXCACHE 0b1111
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXPROT 0b010
 
 # dma for rx2
 
@@ -112,8 +110,6 @@ ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.DMA_DATA_WIDTH_SRC 64
 ad_ip_parameter axi_adrv9001_rx2_dma CONFIG.CACHE_COHERENT 1
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXCACHE 0b1111
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXPROT 0b010
 
 # dma for tx1
 
@@ -127,8 +123,6 @@ ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_ip_parameter axi_adrv9001_tx1_dma CONFIG.CACHE_COHERENT 1
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXCACHE 0b1111
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXPROT 0b010
 
 # dma for tx2
 
@@ -142,8 +136,6 @@ ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.AXI_SLICE_DEST 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_2D_TRANSFER 0
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.DMA_DATA_WIDTH_DEST 64
 ad_ip_parameter axi_adrv9001_tx2_dma CONFIG.CACHE_COHERENT 1
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXCACHE 0b1111
-ad_ip_parameter axi_adrv9001_rx1_dma CONFIG.AXI_AXPROT 0b010
 
 # ad9001 connections
 
