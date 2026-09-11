@@ -22,7 +22,7 @@ def print_dict(d):
         for c in sorted(d[p].keys()):
             for r in d[p][c].keys():
                 print(' '*2*num_spaces, c, '-', r)
-                soms = list(d[p][c][r].keys())
+                soms = sorted(list(d[p][c][r].keys()))
                 adjust = len(max(soms, key=len))
                 for s in soms:
                     srs = list(d[p][c][r][s].keys())
@@ -32,9 +32,13 @@ path = "./projects"
 xsafiles = [os.path.join(d, x)
             for d, dirs, files in os.walk(path)
             for x in files if x.endswith(".xsa")]
+xprfiles = [os.path.join(d, x)
+            for d, dirs, files in os.walk(path)
+            for x in files if x.endswith(".xpr")]
 
 completed = {}
 failed = {}
+project_only = {}
 
 for s in xsafiles:
     l  = s.split("/")
@@ -43,12 +47,26 @@ for s in xsafiles:
     r  = l[4]
     s  = l[6]
     sr = l[7]
+    path_string = "/".join(l[0:7])
+    xprfiles = [i for i in xprfiles if path_string not in i]
+
     d = {p: {c: {r: {s: {sr: ""}}}}}
 
     if "bad_timing" in l[-1]:
 	    merge(failed, d)
     else:
         merge(completed, d)
+
+for s in xprfiles:
+    l  = s.split("/")
+    p  = l[2]
+    c  = l[3]
+    r  = l[4]
+    s  = l[6]
+    sr = l[7]
+
+    d = {p: {c: {r: {s: {sr: ""}}}}}
+    merge(project_only, d)
 
 if completed:
     print("Successful Builds:")
@@ -58,4 +76,8 @@ if failed:
     print("Failed Builds:")
     print_dict(failed)
     print("")
-print("Total finished: {}".format(len(xsafiles)))
+if project_only:
+    print("Project Only:")
+    print_dict(project_only)
+    print("")
+print("Total finished: {}".format(len(xsafiles)+len(xprfiles)))

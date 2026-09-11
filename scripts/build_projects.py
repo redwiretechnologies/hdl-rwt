@@ -9,7 +9,7 @@ import multiprocessing
 from builds.supported_builds import *
 
 # Get a selection from a list
-def get_item_selection(selection_list, item_name, extra_text="", select_all = False, select_newest=False, filter_list=None):
+def get_item_selection(selection_list, item_name, extra_text="", select_all = False, select_newest=False, filter_list=None, filter_list_exact=None):
     selecting = True
     valid_selections = [i for i in range(0, len(selection_list)+1)]
     if int(len(selection_list)) == 1:
@@ -20,7 +20,15 @@ def get_item_selection(selection_list, item_name, extra_text="", select_all = Fa
         s = []
         for f in filter_list:
             for index, n in enumerate(selection_list):
-                if f in n:
+                if str(f) in n:
+                    s.append(index)
+        t = set(s)
+        s = list(t)
+    elif filter_list_exact:
+        s = []
+        for f in filter_list_exact:
+            for index, n in enumerate(selection_list):
+                if str(f) == n:
                     s.append(index)
         t = set(s)
         s = list(t)
@@ -51,7 +59,7 @@ def get_item_selection(selection_list, item_name, extra_text="", select_all = Fa
                 selected.append(selection_list[a])
     return selected
 
-def get_all_selections(all_carriers=False, all_revisions=False, all_personalities=False, all_boards=False, all_som_revisions=False, new_rev=False, new_srev=False, c_filt=[], r_filt=[], p_filt=[], b_filt=[], sr_filt=[]):
+def get_all_selections(all_carriers=False, all_revisions=False, all_personalities=False, all_boards=False, all_som_revisions=False, new_rev=False, new_srev=False, c_filt=[], r_filt=[], p_filt=[], p_filt_exact=[], b_filt=[], sr_filt=[]):
     sc = get_item_selection([key for key in supported_builds.keys()], "Carrier", "", all_carriers, False, c_filt)
     if not all_carriers and not c_filt:
         print("")
@@ -79,7 +87,7 @@ def get_all_selections(all_carriers=False, all_revisions=False, all_personalitie
                 personalities = supported_builds[car]["images"]
                 boards = supported_builds[car]["boards"]
                 som_revisions = supported_builds[car]["som_rev"]
-            persons = get_item_selection(personalities, "Personality", " for Revision {} of Carrier {}".format(rev, car), all_personalities, False, p_filt)
+            persons = get_item_selection(personalities, "Personality", " for Revision {} of Carrier {}".format(rev, car), all_personalities, False, p_filt, p_filt_exact)
             if not all_personalities and not p_filt:
                 print("")
             for person in persons:
@@ -146,7 +154,7 @@ def make_library(clean, dry_run, n=1):
     return ret
 
 # Construct the proper argument to pass to make for the given boards
-def create_board_list(boards, projects_only, clean):
+def create_board_list(boards, projects_only, clean, ignore_fail):
     interm_board_list = []
     for board, srevs in boards.items():
         for srev in srevs:
@@ -154,12 +162,15 @@ def create_board_list(boards, projects_only, clean):
     board_list = []
     projects = ""
     clean_str = ""
-    if projects_only:
-        projects = "proj-"
+    failures = ""
     if clean:
         clean_str = "clean-"
+    elif projects_only:
+        projects = "proj-"
+    elif ignore_fail:
+        failures = "-ignore-fail"
     for b in interm_board_list:
-        board_list.append(projects+clean_str+b)
+        board_list.append(projects+clean_str+b+failures)
     return board_list
 
 # Make a singular board
@@ -220,14 +231,14 @@ def cd_and_make(carrier, revision, personality, board_list, dry_run):
             os.chdir(cwd)
 
 # Create the list of builds to be done
-def iterate_selections(selections, projects_only, clean, clean_lib, dry_run):
+def iterate_selections(selections, projects_only, clean, clean_lib, ignore_fail, dry_run):
     lib_list = []
     build_list = []
     for carrier, val in selections.items():
         for revision, val2 in val.items():
             for personality, boards in val2.items():
                 lib_list.append([carrier, revision, personality, clean_lib, dry_run])
-                for b in create_board_list(boards, projects_only, clean):
+                for b in create_board_list(boards, projects_only, clean, ignore_fail):
                     build_list.append([carrier, revision, personality, b, dry_run])
     return lib_list, build_list
 
@@ -308,6 +319,7 @@ def parse_args():
     parser.add_argument("-b", "--boards", help="Automatically select all boards", action="store_true")
     parser.add_argument("-s", "--som_revisions", help="Automatically select all som_revisions", action="store_true")
     parser.add_argument("-o", "--only_projects", help="Only create projects", action="store_true")
+    parser.add_argument("-i", "--ignore_failures", help="Ignore building again if project file already exists", action="store_true")
     parser.add_argument("--clean", help="Clean instead of creating projects", action="store_true")
     parser.add_argument("--clean_lib", help="Clean libraries instead of creating projects", action="store_true")
     parser.add_argument("-d", "--dry_run", help="Don't actually run any commands. Just print them", action="store_true")
@@ -318,6 +330,7 @@ def parse_args():
     parser.add_argument("--c_filt", action="append", help="Match carrier boards that contain this string. Can be passed multiple times")
     parser.add_argument("--r_filt", action="append", help="Match revisions for carrier boards that contain this string. Can be passed multiple times")
     parser.add_argument("--p_filt", action="append", help="Match personalities that contain this string. Can be passed multiple times")
+    parser.add_argument("--p_filt_exact", action="append", help="Pass personality name exactly as a string. Can be passed multiple times")
     parser.add_argument("--b_filt", action="append", help="Match SOMs that contain this string. Can be passed multiple times")
     parser.add_argument("--sr_filt", action="append", help="Match SOM revisions that contain this string. Can be passed multiple times")
     args = parser.parse_args()
@@ -359,12 +372,12 @@ def main():
     args = parse_args()
     try:
         create_git_log()
-        selections = get_all_selections(args.carriers, args.revisions, args.personalities, args.boards, args.som_revisions, args.new_rev, args.new_srev, args.c_filt, args.r_filt, args.p_filt, args.b_filt, args.sr_filt)
+        selections = get_all_selections(args.carriers, args.revisions, args.personalities, args.boards, args.som_revisions, args.new_rev, args.new_srev, args.c_filt, args.r_filt, args.p_filt, args.p_filt_exact, args.b_filt, args.sr_filt)
     except KeyboardInterrupt:
         print("")
         print("Received keyboard interrupt. Terminating")
         exit(1)
-    lib_list, build_list = iterate_selections(selections, args.only_projects, args.clean, args.clean_lib, args.dry_run)
+    lib_list, build_list = iterate_selections(selections, args.only_projects, args.clean, args.clean_lib, args.ignore_failures, args.dry_run)
     if args.depends:
         multi_process_depends(args.num_builds, lib_list)
     else:
