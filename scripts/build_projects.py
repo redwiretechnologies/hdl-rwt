@@ -371,7 +371,10 @@ def add_git_log(selections):
 def main():
     args = parse_args()
     try:
-        create_git_log()
+        if args.clean or args.clean_lib:
+            pass
+        else:
+            create_git_log()
         selections = get_all_selections(args.carriers, args.revisions, args.personalities, args.boards, args.som_revisions, args.new_rev, args.new_srev, args.c_filt, args.r_filt, args.p_filt, args.p_filt_exact, args.b_filt, args.sr_filt)
     except KeyboardInterrupt:
         print("")

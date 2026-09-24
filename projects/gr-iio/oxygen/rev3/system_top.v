@@ -277,6 +277,9 @@ module system_top (
     .spi0_mosi (spi_mosi),
     .spi0_sclk (spi_clk),
 
+    .send_count(gpio_o[13]),
+    .reset_count(gpio_o[14]),
+
     .emio_uart1_rxd(emio_uart1_rxd),
     .emio_uart1_txd(emio_uart1_txd)
   );

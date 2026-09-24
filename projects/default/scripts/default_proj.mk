@@ -3,6 +3,7 @@
 M_CUSTOM_LIBS += concat_9002
 M_CUSTOM_LIBS += default_block
 M_CUSTOM_LIBS += cic_filter
+M_CUSTOM_LIBS += data_order
 
 M_DEPS += ../../scripts/default_bd.tcl
 

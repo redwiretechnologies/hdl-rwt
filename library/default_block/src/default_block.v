@@ -4,6 +4,7 @@
 
 module default_block #(
   parameter CLK_FREQ = 100000000,
+  parameter CIC_ENABLE = 1,
   parameter ENABLE_DUAL_CIC = 0
 )(
   input         user_clk,
@@ -270,6 +271,7 @@ module default_block #(
 
   default_block_user #(
     .CLK_FREQ(CLK_FREQ),
+    .CIC_ENABLE(CIC_ENABLE),
     .ENABLE_DUAL_CIC(ENABLE_DUAL_CIC)
   )
   i_user(

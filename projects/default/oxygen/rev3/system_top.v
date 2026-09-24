@@ -2,7 +2,10 @@
 
 //  EMIO GPIO Settings:
 //    0-11  : GPIO Header (IO)
-//    12-15 : Reserved
+//    12    : Reserved
+//    13    : Send Count
+//    14    : Send Constant
+//    15    : Reserved
 //    16-21 : RF Personality GPIO (IO)
 //    22    : Pushbutton Interrupt (In)
 //    23    : Reserved
@@ -276,6 +279,9 @@ module system_top (
     .spi0_miso (spi_miso),
     .spi0_mosi (spi_mosi),
     .spi0_sclk (spi_clk),
+
+    .send_count(gpio_o[13]),
+    .reset_count(gpio_o[14]),
 
     .pps(gps_pps),
     .emio_uart1_rxd(emio_uart1_rxd),

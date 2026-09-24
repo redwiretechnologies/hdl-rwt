@@ -4,6 +4,7 @@
 
 module default_block_user #(
   parameter CLK_FREQ = 100000000,
+  parameter CIC_ENABLE = 1,
   parameter ENABLE_DUAL_CIC = 0
 )(
   input         user_clk,
@@ -107,6 +108,7 @@ module default_block_user #(
   wire [4:0]  cfg_adc_filter_id;
   wire [63:0] adc_dec_data;
   wire [3:0]  adc_dec_valid;
+  wire        cic_1_filter_reset;
   wire        cic_2_filter_reset;
 
   default_block_regs #(
@@ -180,7 +182,7 @@ module default_block_user #(
     .adc_correction_enable_b(cfg_adc_correction_enable_b),
     .adc_correction_coefficient_a(cfg_adc_correction_coefficient_a),
     .adc_correction_coefficient_b(cfg_adc_correction_coefficient_b),
-    .adc_filter_reset(cfg_adc_filter_reset)
+    .adc_filter_reset(cic_1_filter_reset)
   );
   cic_filter
   #( .FILTER_ID('d0))
@@ -210,12 +212,17 @@ module default_block_user #(
     .adc_filter_reset(cic_2_filter_reset)
   );
   //By holding the adc_filter_reset line high constantly, we should be able to
-  //optimize out the second CIC filter
+  //optimize out one or both CIC filters
   generate
-      if (ENABLE_DUAL_CIC == 1) begin
+      if ((ENABLE_DUAL_CIC == 1) & (CIC_ENABLE != 0)) begin
           assign cic_2_filter_reset = cfg_adc_filter_reset;
       end else begin
           assign cic_2_filter_reset = 1'b1;
+      end
+      if (CIC_ENABLE != 0) begin
+          assign cic_1_filter_reset = cfg_adc_filter_reset;
+      end else begin
+          assign cic_1_filter_reset = 1'b1;
       end
   endgenerate
 

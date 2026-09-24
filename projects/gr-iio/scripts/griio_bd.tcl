@@ -63,6 +63,24 @@ create_bd_port -dir I gpio_tx2_enable_in
 create_bd_port -dir I tdd_sync
 create_bd_port -dir O tdd_sync_cntr
 
+create_bd_port -dir I send_count
+create_bd_port -dir I reset_count
+
+ad_ip_instance concat_9002 concat_9002_0
+ad_ip_instance concat_9002 concat_9002_1
+
+ad_ip_instance data_order data_order_0
+ad_ip_instance data_order data_order_1
+
+ad_ip_instance breakout_9002 breakout_9002_0
+ad_ip_instance breakout_9002 breakout_9002_1
+
+create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilvector_logic:1.0 reset_invert_0
+set_property -dict [list CONFIG.C_OPERATION {not} CONFIG.C_SIZE {1}] [get_bd_cells reset_invert_0]
+
+create_bd_cell -type inline_hdl -vlnv xilinx.com:inline_hdl:ilvector_logic:1.0 reset_invert_1
+set_property -dict [list CONFIG.C_OPERATION {not} CONFIG.C_SIZE {1}] [get_bd_cells reset_invert_1]
+
 # adrv9001
 
 ad_ip_instance axi_adrv9001 axi_adrv9001
@@ -147,9 +165,11 @@ ad_ip_instance util_upack2 util_dac_2_upack { \
 ad_connect  sys_500m_clk       axi_adrv9001/delay_clk
 ad_connect  axi_adrv9001/adc_1_clk axi_adrv9001_rx1_dma/fifo_wr_clk
 ad_connect  axi_adrv9001/adc_1_clk util_adc_1_pack/clk
+ad_connect  axi_adrv9001/adc_1_clk data_order_0/adc_clk
 
 ad_connect  axi_adrv9001/adc_2_clk axi_adrv9001_rx2_dma/fifo_wr_clk
 ad_connect  axi_adrv9001/adc_2_clk util_adc_2_pack/clk
+ad_connect  axi_adrv9001/adc_2_clk data_order_1/adc_clk
 
 ad_connect  axi_adrv9001/dac_1_clk axi_adrv9001_tx1_dma/m_axis_aclk
 ad_connect  axi_adrv9001/dac_1_clk util_dac_1_upack/clk
@@ -216,17 +236,73 @@ ad_connect gpio_tx2_enable_in  axi_adrv9001/gpio_tx2_enable_in
 ad_connect tdd_sync axi_adrv9001/tdd_sync
 ad_connect tdd_sync_cntr axi_adrv9001/tdd_sync_cntr
 
+# ADRV9002 -> concat_0
+ad_connect axi_adrv9001/adc_1_enable_i0 concat_9002_0/adc_enable_i0
+ad_connect axi_adrv9001/adc_1_valid_i0  concat_9002_0/adc_valid_i0
+ad_connect axi_adrv9001/adc_1_data_i0   concat_9002_0/adc_data_i0
+ad_connect axi_adrv9001/adc_1_enable_q0 concat_9002_0/adc_enable_q0
+ad_connect axi_adrv9001/adc_1_valid_q0  concat_9002_0/adc_valid_q0
+ad_connect axi_adrv9001/adc_1_data_q0   concat_9002_0/adc_data_q0
+ad_connect axi_adrv9001/adc_1_enable_i1 concat_9002_0/adc_enable_i1
+ad_connect axi_adrv9001/adc_1_valid_i1  concat_9002_0/adc_valid_i1
+ad_connect axi_adrv9001/adc_1_data_i1   concat_9002_0/adc_data_i1
+ad_connect axi_adrv9001/adc_1_enable_q1 concat_9002_0/adc_enable_q1
+ad_connect axi_adrv9001/adc_1_valid_q1  concat_9002_0/adc_valid_q1
+ad_connect axi_adrv9001/adc_1_data_q1   concat_9002_0/adc_data_q1
+
+# concat_0 -> data_order_0
+ad_connect axi_adrv9001/adc_1_rst   reset_invert_0/Op1
+ad_connect reset_invert_0/Res       data_order_0/adc_rstn
+ad_connect send_count               data_order_0/send_count
+ad_connect reset_count              data_order_0/reset_count
+ad_connect concat_9002_0/adc_data   data_order_0/adc_data_in
+ad_connect concat_9002_0/adc_enable data_order_0/adc_enable_in
+ad_connect concat_9002_0/adc_valid  data_order_0/adc_valid_in
+
+# data_order_0 -> breakout_0
+ad_connect data_order_0/adc_data_out   breakout_9002_0/adc_data
+ad_connect data_order_0/adc_enable_out breakout_9002_0/adc_enable
+ad_connect data_order_0/adc_valid_out  breakout_9002_0/adc_valid
+
+# ADRV9002 <-> concat_1
+ad_connect axi_adrv9001/adc_2_enable_i0 concat_9002_1/adc_enable_i0
+ad_connect axi_adrv9001/adc_2_valid_i0  concat_9002_1/adc_valid_i0
+ad_connect axi_adrv9001/adc_2_data_i0   concat_9002_1/adc_data_i0
+ad_connect axi_adrv9001/adc_2_enable_q0 concat_9002_1/adc_enable_q0
+ad_connect axi_adrv9001/adc_2_valid_q0  concat_9002_1/adc_valid_q0
+ad_connect axi_adrv9001/adc_2_data_q0   concat_9002_1/adc_data_q0
+ad_connect GND                          concat_9002_1/adc_enable_i1
+ad_connect GND                          concat_9002_1/adc_valid_i1
+ad_connect GND                          concat_9002_1/adc_data_i1
+ad_connect GND                          concat_9002_1/adc_enable_q1
+ad_connect GND                          concat_9002_1/adc_valid_q1
+ad_connect GND                          concat_9002_1/adc_data_q1
+
+# concat_1 -> data_order_1
+ad_connect axi_adrv9001/adc_2_rst   reset_invert_1/Op1
+ad_connect reset_invert_1/Res       data_order_1/adc_rstn
+ad_connect send_count               data_order_1/send_count
+ad_connect reset_count              data_order_1/reset_count
+ad_connect concat_9002_1/adc_data   data_order_1/adc_data_in
+ad_connect concat_9002_1/adc_enable data_order_1/adc_enable_in
+ad_connect concat_9002_1/adc_valid  data_order_1/adc_valid_in
+
+# data_order_1 -> breakout_1
+ad_connect data_order_1/adc_data_out   breakout_9002_1/adc_data
+ad_connect data_order_1/adc_enable_out breakout_9002_1/adc_enable
+ad_connect data_order_1/adc_valid_out  breakout_9002_1/adc_valid
+
 # RX1_RX2 - CPACK - RX_DMA1
-ad_connect  axi_adrv9001/adc_1_rst       util_adc_1_pack/reset
-ad_connect  axi_adrv9001/adc_1_valid_i0  util_adc_1_pack/fifo_wr_en
-ad_connect  axi_adrv9001/adc_1_enable_i0 util_adc_1_pack/enable_0
-ad_connect  axi_adrv9001/adc_1_data_i0   util_adc_1_pack/fifo_wr_data_0
-ad_connect  axi_adrv9001/adc_1_enable_q0 util_adc_1_pack/enable_1
-ad_connect  axi_adrv9001/adc_1_data_q0   util_adc_1_pack/fifo_wr_data_1
-ad_connect  axi_adrv9001/adc_1_enable_i1 util_adc_1_pack/enable_2
-ad_connect  axi_adrv9001/adc_1_data_i1   util_adc_1_pack/fifo_wr_data_2
-ad_connect  axi_adrv9001/adc_1_enable_q1 util_adc_1_pack/enable_3
-ad_connect  axi_adrv9001/adc_1_data_q1   util_adc_1_pack/fifo_wr_data_3
+ad_connect  axi_adrv9001/adc_1_rst        util_adc_1_pack/reset
+ad_connect  breakout_9002_0/adc_valid_i0  util_adc_1_pack/fifo_wr_en
+ad_connect  breakout_9002_0/adc_enable_i0 util_adc_1_pack/enable_0
+ad_connect  breakout_9002_0/adc_data_i0   util_adc_1_pack/fifo_wr_data_0
+ad_connect  breakout_9002_0/adc_enable_q0 util_adc_1_pack/enable_1
+ad_connect  breakout_9002_0/adc_data_q0   util_adc_1_pack/fifo_wr_data_1
+ad_connect  breakout_9002_0/adc_enable_i1 util_adc_1_pack/enable_2
+ad_connect  breakout_9002_0/adc_data_i1   util_adc_1_pack/fifo_wr_data_2
+ad_connect  breakout_9002_0/adc_enable_q1 util_adc_1_pack/enable_3
+ad_connect  breakout_9002_0/adc_data_q1   util_adc_1_pack/fifo_wr_data_3
 
 ad_connect  axi_adrv9001/adc_1_dovf      util_adc_1_pack/fifo_wr_overflow
 
@@ -234,12 +310,12 @@ ad_connect util_adc_1_pack/packed_fifo_wr axi_adrv9001_rx1_dma/fifo_wr
 ad_connect util_adc_1_pack/packed_sync axi_adrv9001_rx1_dma/sync
 
 # RX2 - CPACK - RX_DMA2
-ad_connect  axi_adrv9001/adc_2_rst       util_adc_2_pack/reset
-ad_connect  axi_adrv9001/adc_2_valid_i0  util_adc_2_pack/fifo_wr_en
-ad_connect  axi_adrv9001/adc_2_enable_i0 util_adc_2_pack/enable_0
-ad_connect  axi_adrv9001/adc_2_data_i0   util_adc_2_pack/fifo_wr_data_0
-ad_connect  axi_adrv9001/adc_2_enable_q0 util_adc_2_pack/enable_1
-ad_connect  axi_adrv9001/adc_2_data_q0   util_adc_2_pack/fifo_wr_data_1
+ad_connect  axi_adrv9001/adc_2_rst        util_adc_2_pack/reset
+ad_connect  breakout_9002_1/adc_valid_i0  util_adc_2_pack/fifo_wr_en
+ad_connect  breakout_9002_1/adc_enable_i0 util_adc_2_pack/enable_0
+ad_connect  breakout_9002_1/adc_data_i0   util_adc_2_pack/fifo_wr_data_0
+ad_connect  breakout_9002_1/adc_enable_q0 util_adc_2_pack/enable_1
+ad_connect  breakout_9002_1/adc_data_q0   util_adc_2_pack/fifo_wr_data_1
 
 ad_connect  axi_adrv9001/adc_2_dovf       util_adc_2_pack/fifo_wr_overflow
 
