@@ -14,5 +14,6 @@ do
     echo "Operating on $xsa_file"
     ./scripts/create_dts.sh   "$xsa_file" "$xsa_path"/dts.zip
     ./scripts/create_fsbl.sh  "$xsa_file" "$xsa_path"/fsbl.zip
+    ./scripts/create_sdt.sh   "$xsa_file" "$xsa_path"/sdt.zip
     ./scripts/create_pmufw.sh "$xsa_file" "$xsa_path"/pmufw.zip
 done
